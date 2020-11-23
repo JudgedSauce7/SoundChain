@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import getWeb3 from "./getWeb3";
-import Background from "./components/backdrop/index";
-
+import Landing from "./containers/Landing/index"
 import "./App.css";
 
 class App extends Component {
@@ -67,7 +66,7 @@ class App extends Component {
       //   </p>
       //   <div>The stored value is: {this.state.storageValue}</div>
       // </div>
-      <Background />
+      <Landing />
     );
   }
 }
