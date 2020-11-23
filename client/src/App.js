@@ -4,30 +4,42 @@ import getWeb3 from "./getWeb3";
 import Landing from "./containers/Landing/index";
 import "./App.css";
 
+import ipfsClient from "ipfs-http-client";
+const ipfs = ipfsClient({
+  host: "ipfs.infura.io",
+  port: 5001,
+  protocol: "https",
+});
+
 class App extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null };
+  state = {
+    web3: null,
+    accounts: null,
+    soundchain: null,
+    buffer: null,
+    uploads: [],
+    uploadCount: null,
+    loading: true,
+  };
 
   componentDidMount = async () => {
     try {
-      // Get network provider and web3 instance.
       const web3 = await getWeb3();
-
-      // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
 
-      // Get the contract instance.
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = SoundChainContract.networks[networkId];
+
       const instance = new web3.eth.Contract(
         SoundChainContract.abi,
         deployedNetwork && deployedNetwork.address
       );
 
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance });
+      this.setState(
+        { web3, accounts, soundchain: instance },
+        this.getUploadCount
+      );
     } catch (error) {
-      // Catch any errors for any of the above operations.
       alert(
         `Failed to load web3, accounts, or contract. Check console for details.`
       );
@@ -35,12 +47,80 @@ class App extends Component {
     }
   };
 
+  getUploadCount = async () => {
+    const { soundchain } = this.state;
+    const uploads = await soundchain.methods.uploadCount().call();
+    this.setState({ uploadCount: uploads, loading: false });
+  };
+
+  captureFile = (event) => {
+    event.preventDefault();
+    const file = event.target.files[0];
+    console.log(file);
+    const reader = new window.FileReader();
+    reader.readAsArrayBuffer(file);
+
+    reader.onloadend = () => {
+      console.log(reader.result);
+      this.setState({ buffer: Buffer(reader.result) });
+      console.log("Buffer", this.state.buffer);
+    };
+  };
+
+  uploadMedia = async (title) => {
+    console.log("Uploading File");
+    const result = await ipfs.add(this.state.buffer);
+    const hash = result.path;
+
+    const { accounts, soundchain } = this.state;
+
+    await soundchain.methods
+      .uploadMedia(hash, title)
+      .send({ from: accounts[0] });
+    const uploadCount = soundchain.methods.uploadCount().call();
+    this.setState(uploadCount);
+  };
+
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
+    if (this.state.loading) {
+      return (
+        <div>
+          <h1>Fetching data from Blockchain</h1>
+        </div>
+      );
+    }
     return (
       <div className="App">
+        <h1>{this.state.uploadCount} uploads yet</h1>
+        <form
+          onSubmit={async (event) => {
+            event.preventDefault();
+            const title = this.fileTitle.value;
+            await this.uploadMedia(title);
+          }}
+        >
+          <input
+            type="file"
+            accept=".mp3, .mov, .wav"
+            onChange={this.captureFile}
+          />
+          <br />
+          <input
+            id="title"
+            type="text"
+            placeholder="Title goes here..."
+            required
+            ref={(input) => {
+              this.fileTitle = input;
+            }}
+          />
+          <br />
+          <button type="submit">Upload file</button>
+        </form>
+
         <Landing />
       </div>
     );

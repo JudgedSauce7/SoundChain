@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "antd": "^4.8.5",
+    "ipfs-http-client": "^48.1.1",
     "react": "16.11.0",
     "react-dom": "16.11.0",
     "react-router-dom": "^5.2.0",
