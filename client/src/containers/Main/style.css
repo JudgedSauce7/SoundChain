@@ -31,3 +31,10 @@
   background: rgba(241, 118, 4, 0.79);
   border-radius: 50%;
 }
+
+.text {
+  font-size: 30px;
+  color: rgba(241, 118, 4, 0.79);
+  font-weight: 800;
+  width: 80%;
+}
