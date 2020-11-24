@@ -1,0 +1,33 @@
+.mainText {
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  font-size: 50px;
+  color: rgba(241, 118, 4, 0.79);
+  font-weight: bold;
+  margin-top: 100px;
+  margin-right: 20px;
+}
+
+.mainWindow {
+  background: #fafafa;
+  height: 90vh;
+  width: 100vw;
+}
+
+.profileHeader {
+  display: flex;
+  align-items: center;
+}
+
+.accountDetails {
+  font-size: 20px;
+  margin-left: 40px;
+  font-weight: 700;
+}
+
+.circle {
+  width: 500px;
+  height: 500px;
+  opacity: 0.4;
+  background: rgba(241, 118, 4, 0.79);
+  border-radius: 50%;
+}
