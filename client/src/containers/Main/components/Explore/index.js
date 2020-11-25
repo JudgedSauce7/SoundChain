@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Card, Row, Col, Input, Button} from 'antd'
+import {Card, Row, Col, Button} from 'antd'
 import { HeartFilled, HeartOutlined, SendOutlined} from '@ant-design/icons'
 import Identicon from 'identicon.js';
 import Ethlogo from "../../../../assets/images/ethlogo.png"
@@ -26,7 +26,7 @@ export default class index extends Component {
             height: "300px",
             borderRadius: "20px",
             boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-            margin: "20px",
+            margin: "30px",
         }
 
         const options = {
@@ -71,7 +71,7 @@ export default class index extends Component {
 
                                             <div>
                                                 <p style={{textAlign: "center", marginTop: 20, fontWeight: 700, fontSize: 16, marginBottom: 5}}>Send Tips</p>
-                                                <Input addonAfter={<SendOutlined onClick={() => console.log(upload)} style={{cursor: "pointer", color: "rgba(108, 31, 109, 0.89)", fontSize: 20}}/>}/>
+                                                <Button style={{width: "100%", height: 40, borderRadius: 10}} onClick={() => console.log(upload.title)} icon={<SendOutlined style={{fontSize: 30, color: "rgba(108, 31, 109, 1)"}}/>}/>
                                             </div>
                                             </div>
                                         </Col>
@@ -79,10 +79,9 @@ export default class index extends Component {
                                             <p className="postTitle">{upload.title}</p>
                                             <AudioPlayer
                                             style={{marginLeft: 10, marginTop: 90}}
-                                src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
+                                            src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
                                
-                            />
-                            {/* {upload.title} */}
+                                            />
                                         </Col>
                                     </Row>
                                     </Col>
