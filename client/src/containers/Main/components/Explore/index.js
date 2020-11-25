@@ -25,7 +25,6 @@ export default class index extends Component {
             width: "600px",
             height: "300px",
             borderRadius: "20px",
-            boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
             margin: "30px",
         }
 
@@ -47,7 +46,7 @@ export default class index extends Component {
                         <Card style={{width: "80%", height: "100%", display: "flex", justifyContent: "center", overflowY: "scroll", marginBottom: 20}}>
                         {uploads.map((upload, key) => {
                         return (
-                            <Card key={key} style={postStyle}>
+                            <Card key={key} style={postStyle} hoverable>
                                 <Row>
                                     <Col span={24}>
                                      <div className="postHeader">

@@ -18,7 +18,9 @@ class App extends Component {
     soundchain: null,
     buffer: null,
     uploadCount: null,
+    userCount: null,
     uploads: [],
+    users: [],
     balance: null,
     loading: true,
     balance: 0
@@ -49,6 +51,9 @@ class App extends Component {
       alert(`Failed to load. Please install MetaMask`);
       console.error(error);
     }
+
+    this.getUserCount();
+    this.getUsers();
   };
 
   getUploadCount = async (newUpload) => {
@@ -65,12 +70,25 @@ class App extends Component {
     this.setState({balance: balance})
   };
 
+  getUserCount = async () => {
+    const {soundchain} = this.state
+    const userCount = await soundchain.methods.userCount().call();
+    this.setState({userCount})
+  }
+
   getUploads = async () => {
     for (let i = 1; i <= this.state.uploadCount; i++) {
       const upload = await this.state.soundchain.methods.uploads(i).call();
       this.setState({ uploads: [...this.state.uploads, upload] });
     }
   };
+
+  getUsers = async () => {
+    for(let i = 1; i <= this.state.userCount; i++) {
+      const user = await this.state.soundchain.methods.users(i).call();
+      this.setState({users: [...this.state.users, user]})
+    }
+  }
 
   updateUploads = async () => {
     const upload = await this.state.soundchain.methods
@@ -103,7 +121,8 @@ class App extends Component {
   };
 
   render() {
-    const {accounts, balance, uploadCount, uploads} = this.state
+    const {accounts, balance, uploadCount, uploads, userCount, users} = this.state
+    console.log(userCount, users)
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
@@ -117,44 +136,6 @@ class App extends Component {
     return (
       <div className="App">
         <Landing account={accounts} balance={balance} uploadCount={uploadCount} captureFile={this.captureFile} uploadMedia={this.uploadMedia} uploads={uploads}/>
-        {/* <h1>{this.state.uploadCount} uploads yet !</h1>
-        <form
-          onSubmit={async (event) => {
-            event.preventDefault();
-            await this.uploadMedia(this.title.value);
-          }}
-        >
-          <input
-            type="file"
-            accept=".mp3, .mov, .wav"
-            onChange={this.captureFile}
-          />
-          <br />
-          <input
-            id="title"
-            type="text"
-            placeholder="Title goes here..."
-            required
-            ref={(input) => {
-              this.title = input;
-            }}
-          />
-          <br />
-          <button type="submit">Upload file</button>
-        </form>
-
-        {this.state.uploads.map((upload, key) => {
-          return (
-            <div key={key}>
-              <audio
-                controls
-                src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
-                alt="Loading"
-              />
-              {upload.title}
-            </div>
-          );
-        })} */}
       </div>
     );
   }

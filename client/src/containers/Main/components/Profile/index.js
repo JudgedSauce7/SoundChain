@@ -24,7 +24,7 @@ export default class index extends Component {
             <div style={{marginTop: 60}}>
         <p className="accountDetails">{account}</p>
         <div style={{display: "flex", alignItems: "center", marginLeft: "40px"}}>
-        <WalletOutlined style={{color: "rgba(108, 31, 109, 0.89)", fontSize: "40px"}}/>
+        <WalletOutlined style={{color: "#A615A8", fontSize: "40px"}}/>
         <p style={{marginLeft: 10, fontSize: 18, marginBottom: 0, fontWeight: 700}}>{balance} ETH</p>
         </div>
         </div>

@@ -51,9 +51,9 @@ export default class index extends Component {
                     <p className="mainText" style={{fontSize: "25px", fontWeight: "normal", marginTop: "0", marginRight: "100px"}}>Connecting artists and fans directly using Ethereum.</p>
                 </Col>
                 </Row>
- : null}
+                : null}
                 {currentActiveLink === "explore" ? <Explore account={account} uploads={uploads}/> : null}
-                {currentActiveLink === "media" ? <Media uploadCount={uploadCount} uploadMedia={uploadMedia} captureFile={captureFile}/> : null}
+                {currentActiveLink === "media" ? <Media uploadCount={uploadCount} uploadMedia={uploadMedia} captureFile={captureFile} uploads={uploads}/> : null}
                 {currentActiveLink === "profile" ? <Profile account={account} balance={balance}/> : null}
                 
             </div>

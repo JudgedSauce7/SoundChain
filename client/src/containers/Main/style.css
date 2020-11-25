@@ -44,7 +44,7 @@
 .upload {
   margin-top: 300px;
   margin-bottom: 160px;
-  margin-left: 100px;
+  margin-left: 50px;
 }
 
 .input {
@@ -60,7 +60,7 @@
 }
 
 .button {
-  background: rgba(108, 31, 109, 1);
+  background: #a040a1;
   width: 150px;
   height: 50px;
   border-radius: 10px;
@@ -80,7 +80,7 @@
 .postHeader {
   display: flex;
   align-items: center;
-  background: rgba(108, 31, 109, 0.89);
+  background: #88258a;
   color: #fff;
   font-size: 16px;
   font-weight: 700;
@@ -110,4 +110,26 @@
   font-weight: 700;
   text-align: center;
   margin-top: 20px;
+}
+
+.cardStyle {
+  width: 80%;
+  height: 220px;
+  border-radius: 20px;
+  margin-top: 30px;
+}
+
+.music {
+  font-size: 20px;
+  color: #fff;
+  font-weight: 700;
+}
+
+.container {
+  position: relative;
+}
+
+.icon {
+  font-size: 30px;
+  color: #fff;
 }
