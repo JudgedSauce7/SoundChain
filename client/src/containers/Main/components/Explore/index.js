@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Card, Row, Col, Button} from 'antd'
+import {Card, Row, Col, Button, InputNumber} from 'antd'
 import { HeartFilled, HeartOutlined, SendOutlined} from '@ant-design/icons'
 import Identicon from 'identicon.js';
 import Ethlogo from "../../../../assets/images/ethlogo.png"
@@ -10,7 +10,8 @@ import "../../style.css"
 export default class index extends Component {
     state = {
         liked: false,
-        likedTitle: ""
+        likedTitle: "",
+        tip: 0
     }
 
     likeHandler = (title) => {
@@ -20,7 +21,7 @@ export default class index extends Component {
 
     render() {
         const {account,uploads} = this.props
-        const {liked} = this.state
+        const {liked, tip} = this.state
         const postStyle = {
             width: "600px",
             height: "300px",
@@ -56,7 +57,7 @@ export default class index extends Component {
                                     </div>   
 
                                     <Row>
-                                        <Col span={4}>
+                                        <Col span={6}>
                                             <div className="widgets">
                                             <div style={{display: "flex", alignItems: "center"}}>
                                                 {liked && upload.title === this.state.likedTitle ? <HeartFilled style={likeStyle} onClick={() => this.likeHandler(upload.title)}/> : <HeartOutlined style={likeStyle} onClick={() => this.likeHandler(upload.title)}/>}
@@ -70,11 +71,14 @@ export default class index extends Component {
 
                                             <div>
                                                 <p style={{textAlign: "center", marginTop: 20, fontWeight: 700, fontSize: 16, marginBottom: 5}}>Send Tips</p>
-                                                <Button style={{width: "100%", height: 40, borderRadius: 10}} onClick={() => console.log(upload.title)} icon={<SendOutlined style={{fontSize: 30, color: "rgba(108, 31, 109, 1)"}}/>}/>
+                                                <div style={{display: "flex"}}>
+                                                <InputNumber defaultValue={tip} style={{borderRadius: 10}}/>
+                                                <Button style={{width: 50, height: 40, borderRadius: 10}} onClick={() => console.log(upload.title)} icon={<SendOutlined style={{fontSize: 30, color: "#A194C3"}}/>}/>
+                                                </div>
                                             </div>
                                             </div>
                                         </Col>
-                                        <Col span={20}>
+                                        <Col span={18}>
                                             <p className="postTitle">{upload.title}</p>
                                             <AudioPlayer
                                             style={{marginLeft: 10, marginTop: 90}}

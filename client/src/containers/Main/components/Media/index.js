@@ -17,7 +17,7 @@ export default class index extends Component {
                console.log(i)
                return (
                  <Col span={8} key={i} style={{marginTop: 30}}>
-                    <Card className="cardStyle" style={{marginLeft: i===0 ? 20 : 10, borderRadius: 20, background: "#ADCCE0"}} hoverable>
+                    <Card className="cardStyle" style={{marginLeft: i===0 ? 20 : 10, borderRadius: 20, background: "#A7B0D2"}} hoverable>
                       <div className="container">
                       <p className="music">{upload.title}</p>
                         <div style={{display: "flex", alignItems: "center"}}>
