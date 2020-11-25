@@ -14,7 +14,7 @@ export default class index extends Component {
     }
 
     render() {
-        const {account, balance} = this.props
+        const {account, balance, uploadCount, uploadMedia, captureFile} = this.props
         const {currentActiveLink} = this.state
         return (
             <div className="mainLanding">
@@ -26,7 +26,7 @@ export default class index extends Component {
                 
                 <Row>
                     <Col span={24}>
-                    <MainWindow account={account} currentActiveLink={currentActiveLink} balance={balance}/>
+                    <MainWindow account={account} currentActiveLink={currentActiveLink} balance={balance} uploadCount={uploadCount} uploadMedia={uploadMedia} captureFile={captureFile}/>
                     </Col>
                 </Row>
                 

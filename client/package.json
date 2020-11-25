@@ -7,6 +7,7 @@
     "@material-ui/icons": "^4.9.1",
     "antd": "^4.8.5",
     "identicon.js": "^2.3.3",
+    "ipfs-http-client": "^48.1.1",
     "react": "16.11.0",
     "react-dom": "16.11.0",
     "react-identicons": "^1.2.4",
