@@ -9,17 +9,16 @@ import "../../style.css"
 
 export default class index extends Component {
     state = {
-        tip: 0
+        tip: 0,
     }
 
     likeHandler = async (id) => {
-        console.log(id)
         await this.props.likeMedia(id)
     }
 
     render() {
         const {account,uploads} = this.props
-        const {liked, tip} = this.state
+        const {tip} = this.state
         const postStyle = {
             width: "600px",
             height: "300px",
@@ -49,16 +48,17 @@ export default class index extends Component {
                                 <Row>
                                     <Col span={24}>
                                      <div className="postHeader">
-                                    <img width="30px" height="30px" src={`data:image/png;base64,${new Identicon(account[0], options).toString()}`} style={{boxShadow: "rgba(0, 0, 0, 0.25) 0px 4px 4px 1px", marginLeft: "20px",
+                                    <img width="30px" height="30px" src={`data:image/png;base64,${new Identicon(upload.artist, options).toString()}`} style={{boxShadow: "rgba(0, 0, 0, 0.25) 0px 4px 4px 1px", marginLeft: "20px",
                                     borderRadius: "5px"}}/>
-                                    <p style={{margin: 0, marginLeft: 15}}>{account}</p>
+                                    <p style={{margin: 0, marginLeft: 15}}>{upload.artist}</p>
                                     </div>   
 
                                     <Row>
                                         <Col span={6}>
                                             <div className="widgets">
                                             <div style={{display: "flex", alignItems: "center"}}>
-                                                {upload.likes > 0 && upload.artist === account[0] ? <HeartFilled style={likeStyle} /> : <HeartOutlined style={likeStyle} onClick={() => this.likeHandler(upload.id)}/>}
+                                                {/* {upload.likes > 0 && upload.id === likedId ? <HeartFilled style={likeStyle} /> : <HeartOutlined style={likeStyle} onClick={() => this.likeHandler(upload.id)}/>} */}
+                                                <HeartFilled style={likeStyle} onClick={() => this.likeHandler(upload.id)}/>
                                                 <p className="likes">{upload.likes}</p>
                                                 
                                             </div>

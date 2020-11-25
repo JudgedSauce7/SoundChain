@@ -47,7 +47,7 @@ export default class index extends Component {
         <Col span={6} style={{display: "flex"}}>
         <Divider type="vertical" style={{height: "100%", background: "#ccc"}}/>
         <div className="upload">
-        <h1>You have {uploadCount} uploads yet</h1>
+        <h1>You have {uploads.filter(upload => upload.artist === account[0]).length} uploads yet</h1>
         <form
           onSubmit={async (event) => {
             event.preventDefault();
