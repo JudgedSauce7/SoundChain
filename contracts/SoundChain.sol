@@ -10,9 +10,12 @@ contract SoundChain {
     mapping(address => User) public users;
 
     struct Media {
+        uint256 id;
         string hash_value;
         string title;
         uint256 likes;
+        uint256 tipsCollected;
+        uint256 buyCount;
         address payable artist;
     }
 
@@ -21,7 +24,10 @@ contract SoundChain {
         uint256[] uploads;
         uint256[] bought;
         uint256 amountTipped;
-        uint256 tipsRecieved;
+        uint256 tipsReceived;
+        uint256 amountEarned;
+        uint256 amountSpent;
+        address _address;
     }
 
     event UserAdded(uint256 id, address _address);
@@ -30,22 +36,27 @@ contract SoundChain {
         userCount += 1;
         User memory newUser;
         newUser.id = userCount;
+        newUser._address = _address;
         users[_address] = newUser;
 
         emit UserAdded(userCount, _address);
     }
 
     function tipMedia(uint256 _id) public payable {
-        require(_id < uploadCount, "Invalid Request");
+        require(_id <= uploadCount, "Invalid Request");
         Media memory _media = uploads[_id];
         address payable _artist = _media.artist;
 
         require(_artist != address(0x0), "Invalid Request");
         require(users[_artist].id != 0, "Artist doesn't exist");
+
         _artist.transfer(msg.value);
 
+        _media.tipsCollected += msg.value;
+        uploads[_id] = _media;
+
         User memory artist = users[_artist];
-        artist.tipsRecieved += msg.value;
+        artist.tipsReceived += msg.value;
         users[_artist] = artist;
 
         User memory tipper = users[msg.sender];
@@ -58,7 +69,7 @@ contract SoundChain {
     }
 
     function likeMedia(uint256 _id) public {
-        require(_id < uploadCount, "Invalid request");
+        require(_id <= uploadCount, "Invalid request");
         Media memory _media = uploads[_id];
         _media.likes++;
         uploads[_id] = _media;
@@ -77,7 +88,11 @@ contract SoundChain {
         require(msg.sender != address(0x0));
 
         uploadCount += 1;
-        uploads[uploadCount] = Media(_hash, _title, 0, msg.sender);
+        Media memory newUpload;
+        newUpload.hash_value = _hash;
+        newUpload.title = _title;
+        newUpload.artist = msg.sender;
+        uploads[uploadCount] = newUpload;
 
         User memory artist = users[msg.sender];
         if (artist.id == 0) {
@@ -87,5 +102,49 @@ contract SoundChain {
         users[msg.sender].uploads.push(uploadCount);
 
         emit MediaUploaded(uploadCount, _hash, _title, msg.sender);
+    }
+
+    function buyMedia(uint256 _id) public payable {
+        require(_id <= uploadCount, "Invalid request");
+        Media memory _media = uploads[_id];
+        address payable _artist = _media.artist;
+
+        require(_artist != address(0x0), "Invalid Request");
+        require(users[_artist].id != 0, "Artist doesn't exist");
+
+        _artist.transfer(msg.value);
+
+        _media.buyCount++;
+        uploads[_id] = _media;
+
+        User memory artist = users[_artist];
+        artist.amountEarned += msg.value;
+        users[_artist] = artist;
+
+        User memory buyer = users[msg.sender];
+        if (buyer.id == 0) {
+            addNewUser(msg.sender);
+            buyer = users[msg.sender];
+        }
+        buyer.amountSpent += msg.value;
+        users[msg.sender] = buyer;
+
+        users[msg.sender].bought.push(_id);
+    }
+
+    function getUploads(address _address)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return users[_address].uploads;
+    }
+
+    function getBought(address _address)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return users[_address].bought;
     }
 }
