@@ -24,7 +24,7 @@ export default class index extends Component {
             <div style={{marginTop: 60}}>
         <p className="accountDetails">{account}</p>
         <div style={{display: "flex", alignItems: "center", marginLeft: "40px"}}>
-        <WalletOutlined style={{color: "#A615A8", fontSize: "40px"}}/>
+        <WalletOutlined style={{color: "#a040a1", fontSize: "40px"}}/>
         <p style={{marginLeft: 10, fontSize: 18, marginBottom: 0, fontWeight: 700}}>{balance} ETH</p>
         </div>
         </div>
@@ -36,7 +36,7 @@ export default class index extends Component {
                                 <Tabs defaultActiveKey="stats" size="large" type="card" style={{marginTop: "40px"}}>
                                     <TabPane
                                     tab={
-                                        <span style={{color: "rgba(241, 118, 4, 0.79)"}}>
+                                        <span style={{color: "#a040a1"}}>
                                             <LineChartOutlined />
                                             My Stats
                                         </span>
@@ -44,7 +44,7 @@ export default class index extends Component {
                                     key="stats">My Stats</TabPane>
                                     <TabPane
                                     tab={
-                                        <span style={{color: "rgba(241, 118, 4, 0.79"}}>
+                                        <span style={{color: "#a040a1"}}>
                                             <DollarCircleOutlined />
                                             My Investments
                                         </span>

@@ -8,12 +8,12 @@ import "../../style.css"
 
 export default class index extends Component {
     render() {
-        const {uploadCount, uploads} = this.props
+        const {uploadCount, uploads, account} = this.props
         return (
          <Row>
            <Col span={18}>
              <Row >
-             {uploads.map((upload,i) => {
+               {uploads.filter(upload => upload.artist === account[0]).map((upload,i) => {
                console.log(i)
                return (
                  <Col span={8} key={i} style={{marginTop: 30}}>
@@ -28,6 +28,7 @@ export default class index extends Component {
 
                           <div style={{display: "flex", alignItems: "center"}}>
                           <img src={whiteLogo} height="30px" width="30px" style={{marginLeft: 140}}/>
+                          <p className="music" style={{margin: 0, marginLeft: 10}}>{upload.tipsCollected}</p>
                           </div>
                         
                         </div>
@@ -51,7 +52,8 @@ export default class index extends Component {
           onSubmit={async (event) => {
             event.preventDefault();
             const title = this.fileTitle.value;
-            await this.props.uploadMedia(title);
+            const price = this.price.value;
+            await this.props.uploadMedia(title,price);
           }}
         >
           <input
@@ -71,6 +73,8 @@ export default class index extends Component {
               this.fileTitle = input;
             }}
           />
+          <br />
+          <input id="price" type="text" placeholder="Price of your track (in ETH)" className="input" required ref={(input) => this.price = input}/>
           <br />
           <button type="submit" className="button">Upload file</button>
         </form>

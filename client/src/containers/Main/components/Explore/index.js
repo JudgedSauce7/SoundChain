@@ -9,14 +9,12 @@ import "../../style.css"
 
 export default class index extends Component {
     state = {
-        liked: false,
-        likedTitle: "",
         tip: 0
     }
 
-    likeHandler = (title) => {
-        console.log(title)
-        this.setState({liked: !this.state.liked, likedTitle: title})
+    likeHandler = async (id) => {
+        console.log(id)
+        await this.props.likeMedia(id)
     }
 
     render() {
@@ -60,20 +58,27 @@ export default class index extends Component {
                                         <Col span={6}>
                                             <div className="widgets">
                                             <div style={{display: "flex", alignItems: "center"}}>
-                                                {liked && upload.title === this.state.likedTitle ? <HeartFilled style={likeStyle} onClick={() => this.likeHandler(upload.title)}/> : <HeartOutlined style={likeStyle} onClick={() => this.likeHandler(upload.title)}/>}
+                                                {upload.likes > 0 && upload.artist === account[0] ? <HeartFilled style={likeStyle} /> : <HeartOutlined style={likeStyle} onClick={() => this.likeHandler(upload.id)}/>}
                                                 <p className="likes">{upload.likes}</p>
                                                 
                                             </div>
 
                                             <div style={{display: "flex", alignItems: "center"}}>
                                                 <img src={Ethlogo} width="30" height="40" style={{marginTop: 10}}/>
+                                                <p className="likes" style={{marginTop: 10}}>{upload.tipsCollected}</p>
                                             </div>
 
                                             <div>
-                                                <p style={{textAlign: "center", marginTop: 20, fontWeight: 700, fontSize: 16, marginBottom: 5}}>Send Tips</p>
+                                                <Button style={{background: "#a7b0d2", color: "#fff", fontWeight: 700, marginTop: 10, borderRadius: 10}}>
+                                                    {`Buy for ${upload.price} ETH`}
+                                                </Button>
+                                            </div>
+
+                                            <div>
+                                                <p style={{textAlign: "center", marginTop: 10, fontWeight: 700, fontSize: 16, marginBottom: 5}}>Send Tips</p>
                                                 <div style={{display: "flex"}}>
                                                 <InputNumber defaultValue={tip} style={{borderRadius: 10}}/>
-                                                <Button style={{width: 50, height: 40, borderRadius: 10}} onClick={() => console.log(upload.title)} icon={<SendOutlined style={{fontSize: 30, color: "#A194C3"}}/>}/>
+                                                <Button style={{width: 40, height: 30, borderRadius: 10, background: "#a7b0d2", marginLeft: 10}} onClick={() => console.log(upload.title)} icon={<SendOutlined style={{fontSize: 20, color: "#fff"}}/>}/>
                                                 </div>
                                             </div>
                                             </div>

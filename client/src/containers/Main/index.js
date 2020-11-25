@@ -10,7 +10,7 @@ import "./style.css"
 export default class index extends Component {
     
     render() {
-        const {currentActiveLink, account, balance, uploadCount, uploadMedia, captureFile, uploads} = this.props
+        const {currentActiveLink, account, balance, uploadCount, uploadMedia, captureFile, uploads, loading, likeMedia} = this.props
         return (
             <div className="mainWindow">
                 {currentActiveLink === "home" ? 
@@ -45,16 +45,16 @@ export default class index extends Component {
                     
                 
                 </Col>
-                <Col span={8} style={{marginTop: "100px"}}>
+                {/* <Col span={8} style={{marginTop: "100px"}}>
                 <span style={{display: "flex", alignItems: "center"}}>
                     <p className="mainText" style={{marginBottom: "0"}}>Liberating Music</p> <FireOutlined style={{margin: 0, marginTop: "90px", marginLeft: "-10px", color: "rgba(241, 118, 4, 0.79)", fontSize: "50px"}}/></span><br />
                     <p className="mainText" style={{fontSize: "25px", fontWeight: "normal", marginTop: "0", marginRight: "100px"}}>Connecting artists and fans directly using Ethereum.</p>
-                </Col>
+                </Col> */}
                 </Row>
                 : null}
-                {currentActiveLink === "explore" ? <Explore account={account} uploads={uploads}/> : null}
-                {currentActiveLink === "media" ? <Media uploadCount={uploadCount} uploadMedia={uploadMedia} captureFile={captureFile} uploads={uploads}/> : null}
-                {currentActiveLink === "profile" ? <Profile account={account} balance={balance}/> : null}
+                {currentActiveLink === "explore" ? <Explore account={account} uploads={uploads} loading={loading} likeMedia={likeMedia}/> : null}
+                {currentActiveLink === "media" ? <Media account={account} uploadCount={uploadCount} loading={loading} uploadMedia={uploadMedia} captureFile={captureFile} uploads={uploads}/> : null}
+                {currentActiveLink === "profile" ? <Profile account={account} balance={balance} loading={loading}/> : null}
                 
             </div>
         )

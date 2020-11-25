@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {Spin} from "antd"
 import SoundChainContract from "./contracts/SoundChain.json";
 import getWeb3 from "./getWeb3";
 import Landing from "./containers/Landing/index";
@@ -77,10 +78,12 @@ class App extends Component {
   }
 
   getUploads = async () => {
+    let newUploads = []
     for (let i = 1; i <= this.state.uploadCount; i++) {
       const upload = await this.state.soundchain.methods.uploads(i).call();
-      this.setState({ uploads: [...this.state.uploads, upload] });
+      newUploads = [...newUploads, upload]
     }
+    this.setState({uploads: newUploads})
   };
 
   getUsers = async () => {
@@ -108,34 +111,51 @@ class App extends Component {
     };
   };
 
-  uploadMedia = async (title) => {
+  uploadMedia = async (title,price) => {
     const result = await ipfs.add(this.state.buffer);
     const hash = result.path;
 
     const { accounts, soundchain} = this.state;
-    await soundchain.methods
-      .uploadMedia(hash, title)
-      .send({ from: accounts[0] });
     this.setState({ loading: true });
+    await soundchain.methods
+      .uploadMedia(hash, title,price)
+      .send({ from: accounts[0] });
+    
     this.getUploadCount(true);
+    this.setState({loading: false})
   };
 
+  likeMedia = async (id) => {
+    const {soundchain, accounts, uploads} = this.state
+    this.setState({loading: true})
+    await soundchain.methods.likeMedia(id).send({from: accounts[0]})
+    await this.getUploads()
+    this.setState({loading: false})
+  }
+
+  buyMedia = async (id) => {
+    const {soundchain, accounts} = this.state
+    this.setState({loading: true})
+    await soundchain.methods.likeMedia(id).send({from: accounts[0]})
+    this.setState({loading: false})
+  }
+
   render() {
-    const {accounts, balance, uploadCount, uploads, userCount, users} = this.state
+    const {accounts, balance, uploadCount, uploads, userCount, users, loading} = this.state
     console.log(userCount, users)
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     if (this.state.loading) {
       return (
-        <div>
-          <h1>Fetching data from Blockchain</h1>
+        <div style={{display: "flex", alignItems: "center", justifyContent: "center", marginTop: 150}}>
+          <Spin size="large"/>
         </div>
       );
     }
     return (
       <div className="App">
-        <Landing account={accounts} balance={balance} uploadCount={uploadCount} captureFile={this.captureFile} uploadMedia={this.uploadMedia} uploads={uploads}/>
+        <Landing account={accounts} balance={balance} loading={loading} uploadCount={uploadCount} captureFile={this.captureFile} uploadMedia={this.uploadMedia} uploads={uploads} likeMedia={this.likeMedia}/>
       </div>
     );
   }
