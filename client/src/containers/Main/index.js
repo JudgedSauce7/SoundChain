@@ -10,7 +10,7 @@ import "./style.css"
 export default class index extends Component {
     
     render() {
-        const {currentActiveLink, account, balance, uploadCount, uploadMedia, captureFile} = this.props
+        const {currentActiveLink, account, balance, uploadCount, uploadMedia, captureFile, uploads} = this.props
         return (
             <div className="mainWindow">
                 {currentActiveLink === "home" ? 
@@ -52,7 +52,7 @@ export default class index extends Component {
                 </Col>
                 </Row>
  : null}
-                {currentActiveLink === "explore" ? <Explore /> : null}
+                {currentActiveLink === "explore" ? <Explore account={account} uploads={uploads}/> : null}
                 {currentActiveLink === "media" ? <Media uploadCount={uploadCount} uploadMedia={uploadMedia} captureFile={captureFile}/> : null}
                 {currentActiveLink === "profile" ? <Profile account={account} balance={balance}/> : null}
                 
