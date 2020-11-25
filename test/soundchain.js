@@ -15,9 +15,14 @@ contract("SoundChain", (accounts) => {
   });
 
   it("uploads correctly", async () => {
-    const result = await soundchain.uploadMedia("random_hash", "title", {
-      from: accounts[0],
-    });
+    const result = await soundchain.uploadMedia(
+      "random_hash",
+      "title",
+      1000000000000000,
+      {
+        from: accounts[0],
+      }
+    );
 
     console.log(result);
 
@@ -39,9 +44,14 @@ contract("SoundChain", (accounts) => {
   });
 
   it("maps user to media", async () => {
-    const result = await soundchain.uploadMedia("random_hash2", "title2", {
-      from: accounts[0],
-    });
+    const result = await soundchain.uploadMedia(
+      "random_hash2",
+      "title2",
+      2000000000000000,
+      {
+        from: accounts[0],
+      }
+    );
 
     console.log(result);
 
@@ -74,16 +84,19 @@ contract("SoundChain", (accounts) => {
   });
 
   it("buys correctly", async () => {
-    const cost = 1000000000000000;
-    await soundchain.buyMedia(1, { from: accounts[1], value: cost });
+    const upload = await soundchain.uploads(1);
+    await soundchain.buyMedia(1, {
+      from: accounts[1],
+      value: upload.price.toNumber(),
+    });
     const users = await soundchain.userCount();
     assert.equal(users, 2);
 
     const artist = await soundchain.users(accounts[0]);
     const buyer = await soundchain.users(accounts[1]);
 
-    assert.equal(artist.amountEarned.toNumber(), 1000000000000000);
-    assert.equal(buyer.amountSpent.toNumber(), 1000000000000000);
+    assert.equal(artist.amountEarned.toNumber(), upload.price.toNumber());
+    assert.equal(buyer.amountSpent.toNumber(), upload.price.toNumber());
 
     const bought = await soundchain.getBought(accounts[1]);
     assert.equal(bought.length, 1);

@@ -17,6 +17,7 @@ contract SoundChain {
         uint256 tipsCollected;
         uint256 buyCount;
         address payable artist;
+        uint256 price;
     }
 
     struct User {
@@ -82,7 +83,11 @@ contract SoundChain {
         address payable artist
     );
 
-    function uploadMedia(string memory _hash, string memory _title) public {
+    function uploadMedia(
+        string memory _hash,
+        string memory _title,
+        uint256 _price
+    ) public {
         require(bytes(_hash).length > 0, "File doesn't exist");
         require(bytes(_title).length > 0, "File should have a title");
         require(msg.sender != address(0x0));
@@ -92,6 +97,7 @@ contract SoundChain {
         newUpload.hash_value = _hash;
         newUpload.title = _title;
         newUpload.artist = msg.sender;
+        newUpload.price = _price;
         uploads[uploadCount] = newUpload;
 
         User memory artist = users[msg.sender];
