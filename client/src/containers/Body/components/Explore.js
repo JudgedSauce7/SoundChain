@@ -25,7 +25,7 @@ export default class Explore extends Component {
   }
 
   render() {
-    const { account, uploads, liked } = this.props;
+    const { account, uploads, liked, searchInput } = this.props;
     const { tip } = this.state;
     const postStyle = {
       width: "600px",
@@ -68,7 +68,7 @@ export default class Explore extends Component {
               hoverable
             >
               <Row gutter={10}>
-                {uploads.filter(upload => upload.artist !== account).map((upload) => {
+                {uploads.filter(upload => upload.artist !== account && upload.title.toLowerCase().includes(searchInput)).map((upload) => {
                 return (
                       <Col span={12} key={upload.id}>
                         <Card style={postStyle} hoverable>

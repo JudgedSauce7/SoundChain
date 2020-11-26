@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import mainLogo from "../../assets/images/logo.png";
+import {Input} from "antd"
 import {
   UserOutlined,
   CompassOutlined,
@@ -7,10 +8,12 @@ import {
   CustomerServiceOutlined,
 } from "@ant-design/icons";
 import "./style.css";
+const { Search } = Input;
 
 export default class index extends Component {
+
   render() {
-    const { currentActiveLink } = this.props;
+    const { currentActiveLink, searchHandler} = this.props;
     return (
       <div className="mainHeader">
         <div className="flexboxContainer">
@@ -28,6 +31,11 @@ export default class index extends Component {
             <img src={mainLogo} width="60px" height="60px" />
           </div>
         </div>
+
+        {currentActiveLink === "explore" ? <div className="flexboxContainer">
+        <Search placeholder="Search track by name" onChange={(e) => searchHandler(e.target.value)} style={{ width: 300 }} onPressEnter={(e) => searchHandler(e.target.value)} onSearch={(e) => searchHandler(e.target.value)}/>
+        </div> : null}
+        
 
         <div
           className="flexboxContainer"

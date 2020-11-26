@@ -29,6 +29,7 @@ export default class App extends Component {
     loading: true,
     balance: 0,
     currentActiveLink: "home",
+    searchInput: ""
   };
 
   componentDidMount = async () => {
@@ -121,6 +122,7 @@ export default class App extends Component {
       .send({ from: account });
 
     this.getUploadCount(true);
+    this.getUploads();
     this.setState({ loading: false });
   };
 
@@ -171,6 +173,10 @@ export default class App extends Component {
     this.setState({ currentActiveLink });
   };
 
+  searchHandler = (value) => {
+    this.setState({searchInput: value})
+  }
+
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
@@ -196,6 +202,7 @@ export default class App extends Component {
             <Header
               changeLinkHandler={this.changeLinkHandler}
               currentActiveLink={this.state.currentActiveLink}
+              searchHandler={this.searchHandler}
             />
           </Col>
         </Row>
@@ -211,6 +218,7 @@ export default class App extends Component {
               currentActiveLink={this.state.currentActiveLink}
               bought={this.state.bought}
               liked={this.state.liked}
+              searchInput={this.state.searchInput}
               uploadMedia={this.uploadMedia}
               captureFile={this.captureFile}
               likeMedia={this.likeMedia}

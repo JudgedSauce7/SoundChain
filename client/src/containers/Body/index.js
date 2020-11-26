@@ -22,6 +22,7 @@ export default class index extends Component {
             tipMedia={this.props.tipMedia}
             buyMedia={this.props.buyMedia}
             liked={this.props.liked}
+            searchInput={this.props.searchInput}
           />
         ) : null}
         {this.props.currentActiveLink === "media" ? (
