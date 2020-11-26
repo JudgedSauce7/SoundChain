@@ -132,7 +132,7 @@ export default class App extends Component {
     await soundchain.methods.likeMedia(id).send({ from: account });
     await this.getUploadCount();
     await this.getLiked();
-    this.setState({ loading: false });
+    this.setState({ loading: false, searchInput: "" });
   };
 
   tipMedia = async (id, amount) => {
