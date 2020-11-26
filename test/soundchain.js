@@ -102,4 +102,14 @@ contract("SoundChain", (accounts) => {
     assert.equal(bought.length, 1);
     assert.equal(bought[0], 1);
   });
+
+  it("likes correctly", async () => {
+    await soundchain.likeMedia(1, { from: accounts[1] });
+    const liked = await soundchain.getLiked(accounts[1]);
+    assert.equal(liked.length, 1);
+    assert.equal(liked[0], 1);
+
+    const media = await soundchain.uploads(1);
+    assert.equal(media.likes, 1);
+  });
 });
