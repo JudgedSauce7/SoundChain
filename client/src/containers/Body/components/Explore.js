@@ -17,7 +17,7 @@ export default class Explore extends Component {
   };
 
   render() {
-    const { account, uploads } = this.props;
+    const { account, uploads, liked } = this.props;
     const { tip } = this.state;
     const postStyle = {
       width: "600px",
@@ -92,11 +92,11 @@ export default class Explore extends Component {
                                   alignItems: "center",
                                 }}
                               >
-                                {/* {upload.likes > 0 && upload.id === likedId ? <HeartFilled style={likeStyle} /> : <HeartOutlined style={likeStyle} onClick={() => this.likeHandler(upload.id)}/>} */}
-                                <HeartFilled
+                                {upload.likes > 0 && liked.includes(upload.id) ? <HeartFilled style={likeStyle} /> : <HeartOutlined style={likeStyle} onClick={() => this.likeHandler(upload.id)}/>}
+                                {/* <HeartFilled
                                   style={likeStyle}
                                   onClick={() => this.likeHandler(upload.id)}
-                                />
+                                /> */}
                                 <p className="likes">{upload.likes}</p>
                               </div>
 

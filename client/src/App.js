@@ -129,6 +129,7 @@ export default class App extends Component {
     this.setState({ loading: true });
     await soundchain.methods.likeMedia(id).send({ from: account });
     await this.getUploadCount();
+    await this.getLiked();
     this.setState({ loading: false });
   };
 
@@ -162,7 +163,7 @@ export default class App extends Component {
   getLiked = async () => {
     const {soundchain, account, liked} = this.state
     const likes = await soundchain.methods.getLiked(account).call();
-    this.setState({liked: likes}, () => console.log(this.state.liked))
+    this.setState({liked: likes})
   }
 
   changeLinkHandler = (currentActiveLink) => {
@@ -208,6 +209,7 @@ export default class App extends Component {
               uploads={this.state.uploads}
               currentActiveLink={this.state.currentActiveLink}
               bought={this.state.bought}
+              liked={this.state.liked}
               uploadMedia={this.uploadMedia}
               captureFile={this.captureFile}
               likeMedia={this.likeMedia}
