@@ -24,6 +24,10 @@ export default class Explore extends Component {
     await this.props.tipMedia(id,tip)
   }
 
+  buyTrack = async (id, price) => {
+    await this.props.buyMedia(id, price)
+  }
+
   render() {
     const { account, uploads, liked, searchInput } = this.props;
     const { tip } = this.state;
@@ -124,6 +128,7 @@ export default class Explore extends Component {
 
                               <div>
                                 <Button
+                                onClick={() => this.buyTrack(upload.id, upload.price)}
                                   style={{
                                     background: "#a7b0d2",
                                     color: "#fff",

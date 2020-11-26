@@ -64,6 +64,7 @@ export default class Media extends Component {
 
                         <AudioPlayer
                           src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
+                          autoPlay={false}
                           style={{
                             width: 270,
                             height: 80,

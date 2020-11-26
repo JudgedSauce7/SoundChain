@@ -59,6 +59,7 @@ export default class App extends Component {
       console.error(error);
     }
     await this.getLiked()
+    await this.getBought();
   };
 
   getUploadCount = async (newUpload) => {
@@ -100,6 +101,14 @@ export default class App extends Component {
     this.setState({ uploads: [...this.state.uploads, upload] });
   };
 
+  updateBalance = async () => {
+    const {web3, account} = this.state
+    const wallet = await web3.eth.getBalance(account);
+    let balance = web3.utils.fromWei(wallet, "ether");
+    balance = parseFloat(balance).toFixed(3);
+    this.setState({balance})
+  }
+
   captureFile = (event) => {
     event.preventDefault();
     const file = event.target.files[0];
@@ -123,6 +132,7 @@ export default class App extends Component {
 
     this.getUploadCount(true);
     this.getUploads();
+    this.updateBalance();
     this.setState({ loading: false });
   };
 
@@ -132,6 +142,7 @@ export default class App extends Component {
     await soundchain.methods.likeMedia(id).send({ from: account });
     await this.getUploadCount();
     await this.getLiked();
+    this.updateBalance();
     this.setState({ loading: false, searchInput: "" });
   };
 
@@ -143,24 +154,28 @@ export default class App extends Component {
       .tipMedia(id)
       .send({ from: account, value: amt });
     await this.getUploadCount();
-    this.setState({ loading: false });
+    this.updateBalance();
+    this.setState({ loading: false, searchInput: "" });
   };
 
-  buyMedia = async (id) => {
-    const { soundchain, account } = this.state;
+  buyMedia = async (id, price) => {
+    const { soundchain, account, web3} = this.state;
     this.setState({ loading: true });
-    await soundchain.methods.buyMedia(id).send({ from: account });
-    this.setState({ loading: false });
+    const amt = web3.utils.toWei(price.toString(), "Ether")
+    await soundchain.methods.buyMedia(id).send({ from: account, value: amt });
+    this.updateBalance();
+    this.getBought();
+    this.setState({ loading: false, searchInput: "" });
   };
 
   getBought = async () => {
-    const { soundchain, account, bought } = this.state;
-    const songs = await soundchain.methods.getBought(account).call();
-    songs.forEach(async (id) => {
-      const song = await soundchain.methods.uploads(id).call();
-      bought = [...bought, song];
-    });
-    this.setState({ bought });
+    const { soundchain, account} = this.state;
+    const boughtSongs = await soundchain.methods.getBought(account).call();
+    // songs.forEach(async (id) => {
+    //   let song = await soundchain.methods.uploads(id).call();
+    //   bought = [...bought, song];
+    // });
+    this.setState({ bought: boughtSongs });
   };
 
   getLiked = async () => {
@@ -179,7 +194,7 @@ export default class App extends Component {
 
   render() {
     if (!this.state.web3) {
-      return <div>Loading Web3, accounts, and contract...</div>;
+      return <div style={{display: "flex", alignItems: "center", justifyContent: "center", marginTop: 300}}><Spin size="large"/></div>;
     }
     if (this.state.loading) {
       return (
@@ -188,7 +203,7 @@ export default class App extends Component {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            marginTop: 150,
+            marginTop: 300
           }}
         >
           <Spin size="large" />

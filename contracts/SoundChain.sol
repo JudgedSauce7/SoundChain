@@ -96,6 +96,7 @@ contract SoundChain {
 
         uploadCount += 1;
         Media memory newUpload;
+        newUpload.id = uploadCount;
         newUpload.hash_value = _hash;
         newUpload.title = _title;
         newUpload.artist = msg.sender;

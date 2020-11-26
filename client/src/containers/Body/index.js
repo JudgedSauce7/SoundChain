@@ -11,7 +11,7 @@ export default class index extends Component {
     return (
       <div className="mainWindow">
         {this.props.currentActiveLink === "home" ? (
-          <Home bought={this.props.bought} />
+          <Home bought={this.props.bought} uploads={this.props.uploads}/>
         ) : null}
         {this.props.currentActiveLink === "explore" ? (
           <Explore
