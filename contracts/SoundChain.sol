@@ -22,6 +22,7 @@ contract SoundChain {
 
     struct User {
         uint256 id;
+        uint256[] liked;
         uint256[] uploads;
         uint256[] bought;
         uint256 amountTipped;
@@ -74,6 +75,7 @@ contract SoundChain {
         Media memory _media = uploads[_id];
         _media.likes++;
         uploads[_id] = _media;
+        users[msg.sender].liked.push(_id);
     }
 
     event MediaUploaded(
@@ -152,5 +154,9 @@ contract SoundChain {
         returns (uint256[] memory)
     {
         return users[_address].bought;
+    }
+
+    function getLiked(address _address) public view returns (uint256[] memory) {
+        return users[_address].liked;
     }
 }
