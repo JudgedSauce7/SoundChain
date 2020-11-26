@@ -57,7 +57,7 @@ export default class Media extends Component {
                               className="music"
                               style={{ margin: 0, marginLeft: 10 }}
                             >
-                              {upload.tipsCollected}
+                              {window.web3.fromWei(upload.tipsCollected.toString(), "Ether")}
                             </p>
                           </div>
                         </div>

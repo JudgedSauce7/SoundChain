@@ -134,11 +134,12 @@ export default class App extends Component {
   };
 
   tipMedia = async (id, amount) => {
-    const { soundchain, account } = this.state;
+    const { soundchain, account, web3 } = this.state;
+    const amt = web3.utils.toWei(amount.toString() , "Ether")
     this.setState({ loading: true });
     await soundchain.methods
       .tipMedia(id)
-      .send({ from: account, value: amount });
+      .send({ from: account, value: amt });
     await this.getUploadCount();
     this.setState({ loading: false });
   };

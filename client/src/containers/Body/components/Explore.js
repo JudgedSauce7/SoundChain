@@ -16,6 +16,14 @@ export default class Explore extends Component {
     await this.props.likeMedia(id);
   };
 
+  changeHandler = value => {
+    this.setState({tip: value})
+  }
+
+  tipPost = async (id,tip) => {
+    await this.props.tipMedia(id,tip)
+  }
+
   render() {
     const { account, uploads, liked } = this.props;
     const { tip } = this.state;
@@ -93,10 +101,7 @@ export default class Explore extends Component {
                                 }}
                               >
                                 {upload.likes > 0 && liked.includes(upload.id) ? <HeartFilled style={likeStyle} /> : <HeartOutlined style={likeStyle} onClick={() => this.likeHandler(upload.id)}/>}
-                                {/* <HeartFilled
-                                  style={likeStyle}
-                                  onClick={() => this.likeHandler(upload.id)}
-                                /> */}
+                    
                                 <p className="likes">{upload.likes}</p>
                               </div>
 
@@ -113,7 +118,7 @@ export default class Explore extends Component {
                                   style={{ marginTop: 10 }}
                                 />
                                 <p className="likes" style={{ marginTop: 10 }}>
-                                  {upload.tipsCollected}
+                                  {window.web3.fromWei(upload.tipsCollected.toString(), "Ether")}
                                 </p>
                               </div>
 
@@ -147,6 +152,7 @@ export default class Explore extends Component {
                                   <InputNumber
                                     defaultValue={tip}
                                     style={{ borderRadius: 10 }}
+                                    onChange={this.changeHandler}
                                   />
                                   <Button
                                     style={{
@@ -156,7 +162,7 @@ export default class Explore extends Component {
                                       background: "#a7b0d2",
                                       marginLeft: 10,
                                     }}
-                                    onClick={() => console.log(upload.title)}
+                                    onClick={() => this.tipPost(upload.id, tip)}
                                     icon={
                                       <SendOutlined
                                         style={{ fontSize: 20, color: "#fff" }}
