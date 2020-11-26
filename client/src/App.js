@@ -25,6 +25,7 @@ export default class App extends Component {
     uploads: [],
     users: [],
     bought: [],
+    liked: [],
     loading: true,
     balance: 0,
     currentActiveLink: "home",
@@ -56,6 +57,7 @@ export default class App extends Component {
       alert(`Failed to load. Please install MetaMask`);
       console.error(error);
     }
+    await this.getLiked()
   };
 
   getUploadCount = async (newUpload) => {
@@ -156,6 +158,12 @@ export default class App extends Component {
     });
     this.setState({ bought });
   };
+
+  getLiked = async () => {
+    const {soundchain, account, liked} = this.state
+    const likes = await soundchain.methods.getLiked(account).call();
+    this.setState({liked: likes}, () => console.log(this.state.liked))
+  }
 
   changeLinkHandler = (currentActiveLink) => {
     this.setState({ currentActiveLink });

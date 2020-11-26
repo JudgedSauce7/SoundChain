@@ -18,7 +18,6 @@ export default class Explore extends Component {
 
   render() {
     const { account, uploads } = this.props;
-    console.log(account)
     const { tip } = this.state;
     const postStyle = {
       width: "600px",
