@@ -7,6 +7,7 @@ import "./style.css";
 
 export default class index extends Component {
   render() {
+
     return (
       <div className="mainWindow">
         {this.props.currentActiveLink === "home" ? (
@@ -14,6 +15,7 @@ export default class index extends Component {
         ) : null}
         {this.props.currentActiveLink === "explore" ? (
           <Explore
+          account={this.props.account}
             uploads={this.props.uploads}
             loading={this.props.loading}
             likeMedia={this.props.likeMedia}

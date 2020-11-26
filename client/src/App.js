@@ -78,7 +78,7 @@ export default class App extends Component {
     let newUploads = [];
     for (let i = 1; i <= this.state.uploadCount; i++) {
       const upload = await this.state.soundchain.methods.uploads(i).call();
-      newUploads = [...newUploads, upload];
+      newUploads = [upload, ...newUploads];
     }
     this.setState({ uploads: newUploads });
   };

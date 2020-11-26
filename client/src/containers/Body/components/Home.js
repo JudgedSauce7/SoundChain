@@ -15,12 +15,12 @@ export default class Home extends Component {
       <Row>
         <Col span={18}>
           {bought.length === 0 ? (
-            <h1>
+            <h1 className="mainHeading">
               You haven't bought anything yet. Head on to the explore tab to see
               what's trending!
             </h1>
           ) : (
-            <h1>
+            <h1 className="mainHeading">
               You have bought {bought.length} songs yet. Head on to the explore
               tab for more...
             </h1>
@@ -89,25 +89,26 @@ export default class Home extends Component {
           </Row>
         </Col>
 
-        <Col span={6} style={{ display: "flex" }}>
+        <Col span={6} style={{ display: "flex", height: "100vh" }}>
           <Divider
             type="vertical"
             style={{ height: "100%", background: "#ccc" }}
           />
+          <div style={{marginTop: 100}}>
           <p style={{ alignItems: "center" }}>
-            <p className="mainText" style={{ marginBottom: "0" }}>
+            <p className="mainText" style={{ marginBottom: "0"}}>
               Liberating Music
-            </p>{" "}
+            </p>
             <FireOutlined
               style={{
                 margin: 0,
-                marginTop: "90px",
                 marginLeft: "-10px",
                 color: "rgba(241, 118, 4, 0.79)",
                 fontSize: "100px",
               }}
             />
           </p>
+          </div>
           <br />
           {/* <div
             className="mainText"

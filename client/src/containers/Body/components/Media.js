@@ -16,7 +16,6 @@ export default class Media extends Component {
             {uploads
               .filter((upload) => upload.artist === account)
               .map((upload, i) => {
-                console.log(i);
                 return (
                   <Col span={8} key={i} style={{ marginTop: 30 }}>
                     <Card

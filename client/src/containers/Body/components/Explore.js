@@ -18,6 +18,7 @@ export default class Explore extends Component {
 
   render() {
     const { account, uploads } = this.props;
+    console.log(account)
     const { tip } = this.state;
     const postStyle = {
       width: "600px",
@@ -50,19 +51,20 @@ export default class Explore extends Component {
           >
             <Card
               style={{
-                width: "80%",
+                width: "90%",
                 height: "100%",
                 display: "flex",
                 justifyContent: "center",
                 overflowY: "scroll",
                 marginBottom: 20,
               }}
+              hoverable
             >
-              {uploads.map((upload, key) => {
+              <Row gutter={10}>
+                {uploads.filter(upload => upload.artist !== account).map((upload) => {
                 return (
-                  <Card key={key} style={postStyle} hoverable>
-                    <Row>
-                      <Col span={24}>
+                      <Col span={12} key={upload.id}>
+                        <Card style={postStyle} hoverable>
                         <div className="postHeader">
                           <img
                             width="30px"
@@ -174,11 +176,13 @@ export default class Explore extends Component {
                             />
                           </Col>
                         </Row>
+                        </Card>
                       </Col>
-                    </Row>
-                  </Card>
+                    
                 );
               })}
+              
+              </Row>
             </Card>
           </Col>
         </Row>
