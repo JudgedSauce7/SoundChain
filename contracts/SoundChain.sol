@@ -29,6 +29,7 @@ contract SoundChain {
         uint256 tipsReceived;
         uint256 amountEarned;
         uint256 amountSpent;
+        uint256 songsListened;
         address _address;
     }
 
@@ -159,5 +160,11 @@ contract SoundChain {
 
     function getLiked(address _address) public view returns (uint256[] memory) {
         return users[_address].liked;
+    }
+
+    function listenSong(address _address) public {
+        User memory _user = users[_address];
+        _user.songsListened++;
+        users[_address] = _user;
     }
 }

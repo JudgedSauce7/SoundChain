@@ -9,9 +9,8 @@ import "../style.css";
 
 export default class Explore extends Component {
   constructor(props) {
-    super(props);
-    this.player = React.createRef();
-    this.pauseMedia = this.pauseMedia.bind(this);
+    super();
+    this.player = [];
   }
 
   state = {
@@ -34,12 +33,11 @@ export default class Explore extends Component {
     await this.props.buyMedia(id, price);
   };
 
-  pauseMedia() {
-    setTimeout(function () {
-      alert("Buy this song for more !");
-    }, 6000);
-    // this.player.pause();
-  }
+  listenHandler = async (id) => {
+    this.player[id].audio.current.muted = true;
+    await this.props.listenSong();
+    this.player[id].audio.current.muted = false;
+  };
 
   render() {
     const { bought, account, uploads, liked, searchInput } = this.props;
@@ -91,7 +89,7 @@ export default class Explore extends Component {
                       upload.artist !== account &&
                       upload.title.toLowerCase().includes(searchInput)
                   )
-                  .map((upload) => {
+                  .map((upload, key) => {
                     return (
                       <Col span={12} key={upload.id}>
                         <Card style={postStyle} hoverable>
@@ -226,23 +224,23 @@ export default class Explore extends Component {
                             <Col span={18}>
                               <p className="postTitle">{upload.title}</p>
                               {bought.includes(upload.id) ? (
-                                <AudioPlayer
-                                  ref={(player) => {
-                                    this.player = player;
-                                  }}
-                                  style={{ marginLeft: 10, marginTop: 90 }}
-                                  src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
-                                />
+                                <p>Already Bought !</p>
                               ) : (
-                                <AudioPlayer
-                                  ref={(player) => {
-                                    this.player = player;
-                                  }}
-                                  style={{ marginLeft: 10, marginTop: 90 }}
-                                  src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
-                                  onPlay={this.pauseMedia}
-                                />
+                                <p>
+                                  Pay a gas fee to listen or buy it once for
+                                  unlimited access !
+                                </p>
                               )}
+                              <AudioPlayer
+                                ref={(ref) => (this.player[key] = ref)}
+                                style={{ marginLeft: 10, marginTop: 60 }}
+                                src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
+                                onPlay={
+                                  bought.includes(upload.id)
+                                    ? null
+                                    : () => this.listenHandler(key)
+                                }
+                              />
                             </Col>
                           </Row>
                         </Card>

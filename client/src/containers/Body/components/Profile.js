@@ -105,13 +105,14 @@ export default class Profile extends Component {
                         "Ether"
                       )}{" "}
                       ETH
-                      <br /> Amount Tipped:{" "}
+                      <br /> Amount Spent:{" "}
                       {window.web3.fromWei(
                         user.amountSpent.toString(),
                         "Ether"
                       )}{" "}
                       ETH
                       <br />
+                      Songs Listened: {user.songsListened};
                     </p>
                   </TabPane>
                   <TabPane
