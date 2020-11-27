@@ -30,6 +30,7 @@ export default class App extends Component {
     balance: 0,
     currentActiveLink: "home",
     searchInput: "",
+    sortBy: "latest",
     user: null,
   };
 
@@ -177,10 +178,6 @@ export default class App extends Component {
   getBought = async () => {
     const { soundchain, account } = this.state;
     const boughtSongs = await soundchain.methods.getBought(account).call();
-    // songs.forEach(async (id) => {
-    //   let song = await soundchain.methods.uploads(id).call();
-    //   bought = [...bought, song];
-    // });
     this.setState({ bought: boughtSongs });
   };
 
@@ -197,6 +194,21 @@ export default class App extends Component {
   searchHandler = (value) => {
     this.setState({ searchInput: value });
   };
+
+  sortHandler = async (value) => {
+    const sortedUploads = this.state.uploads
+    this.setState({sortBy: value});
+    if(value === "likes"){
+      sortedUploads.sort((a,b) => (a.likes < b.likes) ? 1 : ((b.likes < a.likes) ? -1 : 0))
+    } else if(value === "tips") {
+      sortedUploads.sort((a,b) => (a.tipsCollected < b.tipsCollected) ? 1 : ((b.tipsCollected < a.tipsCollected) ? -1 : 0))
+    } else {
+      this.getUploads()
+      return
+    }
+
+    this.setState({uploads: sortedUploads})
+  }
 
   render() {
     if (!this.state.web3) {
@@ -235,6 +247,8 @@ export default class App extends Component {
               changeLinkHandler={this.changeLinkHandler}
               currentActiveLink={this.state.currentActiveLink}
               searchHandler={this.searchHandler}
+              sortBy={this.state.sortBy}
+              sortHandler={this.sortHandler}
             />
           </Col>
         </Row>
@@ -252,6 +266,7 @@ export default class App extends Component {
               liked={this.state.liked}
               searchInput={this.state.searchInput}
               user={this.state.user}
+              sortBy={this.state.sortBy}
               uploadMedia={this.uploadMedia}
               captureFile={this.captureFile}
               likeMedia={this.likeMedia}
