@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import Identicon from "identicon.js";
 import "../style.css";
+import { useTheme } from "@material-ui/core";
 
 const { TabPane } = Tabs;
 
@@ -15,7 +16,7 @@ export default class Profile extends Component {
     const options = {
       background: [255, 255, 255, 255],
     };
-    const { account, balance } = this.props;
+    const { user, account, balance } = this.props;
     return (
       <div>
         <Row>
@@ -78,7 +79,40 @@ export default class Profile extends Component {
                     }
                     key="stats"
                   >
-                    My Stats
+                    <p
+                      style={{
+                        marginLeft: 10,
+                        fontSize: 22,
+                        marginBottom: 0,
+                        fontWeight: 700,
+                      }}
+                    >
+                      Amount Tipped:{" "}
+                      {window.web3.fromWei(
+                        user.amountTipped.toString(),
+                        "Ether"
+                      )}{" "}
+                      ETH <br />
+                      Tips Received:{" "}
+                      {window.web3.fromWei(
+                        user.tipsReceived.toString(),
+                        "Ether"
+                      )}{" "}
+                      ETH
+                      <br /> Amount Earned:{" "}
+                      {window.web3.fromWei(
+                        user.amountEarned.toString(),
+                        "Ether"
+                      )}{" "}
+                      ETH
+                      <br /> Amount Tipped:{" "}
+                      {window.web3.fromWei(
+                        user.amountSpent.toString(),
+                        "Ether"
+                      )}{" "}
+                      ETH
+                      <br />
+                    </p>
                   </TabPane>
                   <TabPane
                     tab={

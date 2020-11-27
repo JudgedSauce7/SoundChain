@@ -8,6 +8,12 @@ import "react-h5-audio-player/lib/styles.css";
 import "../style.css";
 
 export default class Explore extends Component {
+  constructor(props) {
+    super(props);
+    this.player = React.createRef();
+    this.pauseMedia = this.pauseMedia.bind(this);
+  }
+
   state = {
     tip: 0,
   };
@@ -16,21 +22,28 @@ export default class Explore extends Component {
     await this.props.likeMedia(id);
   };
 
-  changeHandler = value => {
-    this.setState({tip: value})
-  }
+  changeHandler = (value) => {
+    this.setState({ tip: value });
+  };
 
-  tipPost = async (id,tip) => {
-    await this.props.tipMedia(id,tip)
-  }
+  tipPost = async (id, tip) => {
+    await this.props.tipMedia(id, tip);
+  };
 
   buyTrack = async (id, price) => {
-    await this.props.buyMedia(id, price)
+    await this.props.buyMedia(id, price);
+  };
+
+  pauseMedia() {
+    setTimeout(function () {
+      alert("Buy this song for more !");
+    }, 6000);
+    // this.player.pause();
   }
 
   render() {
-    const { account, uploads, liked, searchInput } = this.props;
-    const { tip } = this.state;
+    const { bought, account, uploads, liked, searchInput } = this.props;
+    const { tip, muted } = this.state;
     const postStyle = {
       width: "600px",
       height: "300px",
@@ -72,126 +85,170 @@ export default class Explore extends Component {
               hoverable
             >
               <Row gutter={10}>
-                {uploads.filter(upload => upload.artist !== account && upload.title.toLowerCase().includes(searchInput)).map((upload) => {
-                return (
+                {uploads
+                  .filter(
+                    (upload) =>
+                      upload.artist !== account &&
+                      upload.title.toLowerCase().includes(searchInput)
+                  )
+                  .map((upload) => {
+                    return (
                       <Col span={12} key={upload.id}>
                         <Card style={postStyle} hoverable>
-                        <div className="postHeader">
-                          <img
-                            width="30px"
-                            height="30px"
-                            src={`data:image/png;base64,${new Identicon(
-                              upload.artist,
-                              options
-                            ).toString()}`}
-                            style={{
-                              boxShadow: "rgba(0, 0, 0, 0.25) 0px 4px 4px 1px",
-                              marginLeft: "20px",
-                              borderRadius: "5px",
-                            }}
-                          />
-                          <p style={{ margin: 0, marginLeft: 15 }}>
-                            {upload.artist}
-                          </p>
-                        </div>
+                          <div className="postHeader">
+                            <img
+                              width="30px"
+                              height="30px"
+                              src={`data:image/png;base64,${new Identicon(
+                                upload.artist,
+                                options
+                              ).toString()}`}
+                              style={{
+                                boxShadow:
+                                  "rgba(0, 0, 0, 0.25) 0px 4px 4px 1px",
+                                marginLeft: "20px",
+                                borderRadius: "5px",
+                              }}
+                            />
+                            <p style={{ margin: 0, marginLeft: 15 }}>
+                              {upload.artist}
+                            </p>
+                          </div>
 
-                        <Row>
-                          <Col span={6}>
-                            <div className="widgets">
-                              <div
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                              >
-                                {upload.likes > 0 && liked.includes(upload.id) ? <HeartFilled style={likeStyle} /> : <HeartOutlined style={likeStyle} onClick={() => this.likeHandler(upload.id)}/>}
-                    
-                                <p className="likes">{upload.likes}</p>
-                              </div>
-
-                              <div
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <img
-                                  src={Ethlogo}
-                                  width="30"
-                                  height="40"
-                                  style={{ marginTop: 10 }}
-                                />
-                                <p className="likes" style={{ marginTop: 10 }}>
-                                  {window.web3.fromWei(upload.tipsCollected.toString(), "Ether")}
-                                </p>
-                              </div>
-
-                              <div>
-                                <Button
-                                onClick={() => this.buyTrack(upload.id, upload.price)}
+                          <Row>
+                            <Col span={6}>
+                              <div className="widgets">
+                                <div
                                   style={{
-                                    background: "#a7b0d2",
-                                    color: "#fff",
-                                    fontWeight: 700,
-                                    marginTop: 10,
-                                    borderRadius: 10,
+                                    display: "flex",
+                                    alignItems: "center",
                                   }}
                                 >
-                                  {`Buy for ${upload.price} ETH`}
-                                </Button>
-                              </div>
+                                  {upload.likes > 0 &&
+                                  liked.includes(upload.id) ? (
+                                    <HeartFilled style={likeStyle} />
+                                  ) : (
+                                    <HeartOutlined
+                                      style={likeStyle}
+                                      onClick={() =>
+                                        this.likeHandler(upload.id)
+                                      }
+                                    />
+                                  )}
 
-                              <div>
-                                <p
+                                  <p className="likes">{upload.likes}</p>
+                                </div>
+
+                                <div
                                   style={{
-                                    textAlign: "center",
-                                    marginTop: 10,
-                                    fontWeight: 700,
-                                    fontSize: 16,
-                                    marginBottom: 5,
+                                    display: "flex",
+                                    alignItems: "center",
                                   }}
                                 >
-                                  Send Tips
-                                </p>
-                                <div style={{ display: "flex" }}>
-                                  <InputNumber
-                                    defaultValue={tip}
-                                    style={{ borderRadius: 10 }}
-                                    onChange={this.changeHandler}
+                                  <img
+                                    src={Ethlogo}
+                                    width="30"
+                                    height="40"
+                                    style={{ marginTop: 10 }}
                                   />
-                                  <Button
+                                  <p
+                                    className="likes"
+                                    style={{ marginTop: 10 }}
+                                  >
+                                    {window.web3.fromWei(
+                                      upload.tipsCollected.toString(),
+                                      "Ether"
+                                    )}
+                                  </p>
+                                </div>
+
+                                {bought.includes(upload.id) ? null : (
+                                  <div>
+                                    <Button
+                                      onClick={() =>
+                                        this.buyTrack(upload.id, upload.price)
+                                      }
+                                      style={{
+                                        background: "#a7b0d2",
+                                        color: "#fff",
+                                        fontWeight: 700,
+                                        marginTop: 10,
+                                        borderRadius: 10,
+                                      }}
+                                    >
+                                      {`Buy for ${upload.price} ETH`}
+                                    </Button>
+                                  </div>
+                                )}
+
+                                <div>
+                                  <p
                                     style={{
-                                      width: 40,
-                                      height: 30,
-                                      borderRadius: 10,
-                                      background: "#a7b0d2",
-                                      marginLeft: 10,
+                                      textAlign: "center",
+                                      marginTop: 10,
+                                      fontWeight: 700,
+                                      fontSize: 16,
+                                      marginBottom: 5,
                                     }}
-                                    onClick={() => this.tipPost(upload.id, tip)}
-                                    icon={
-                                      <SendOutlined
-                                        style={{ fontSize: 20, color: "#fff" }}
-                                      />
-                                    }
-                                  />
+                                  >
+                                    Send Tips
+                                  </p>
+                                  <div style={{ display: "flex" }}>
+                                    <InputNumber
+                                      defaultValue={tip}
+                                      style={{ borderRadius: 10 }}
+                                      onChange={this.changeHandler}
+                                    />
+                                    <Button
+                                      style={{
+                                        width: 40,
+                                        height: 30,
+                                        borderRadius: 10,
+                                        background: "#a7b0d2",
+                                        marginLeft: 10,
+                                      }}
+                                      onClick={() =>
+                                        this.tipPost(upload.id, tip)
+                                      }
+                                      icon={
+                                        <SendOutlined
+                                          style={{
+                                            fontSize: 20,
+                                            color: "#fff",
+                                          }}
+                                        />
+                                      }
+                                    />
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </Col>
-                          <Col span={18}>
-                            <p className="postTitle">{upload.title}</p>
-                            <AudioPlayer
-                              style={{ marginLeft: 10, marginTop: 90 }}
-                              src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
-                            />
-                          </Col>
-                        </Row>
+                            </Col>
+                            <Col span={18}>
+                              <p className="postTitle">{upload.title}</p>
+                              {bought.includes(upload.id) ? (
+                                <AudioPlayer
+                                  ref={(player) => {
+                                    this.player = player;
+                                  }}
+                                  style={{ marginLeft: 10, marginTop: 90 }}
+                                  src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
+                                />
+                              ) : (
+                                <AudioPlayer
+                                  ref={(player) => {
+                                    this.player = player;
+                                  }}
+                                  style={{ marginLeft: 10, marginTop: 90 }}
+                                  src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
+                                  onPlay={this.pauseMedia}
+                                />
+                              )}
+                            </Col>
+                          </Row>
                         </Card>
                       </Col>
-                    
-                );
-              })}
-              
+                    );
+                  })}
               </Row>
             </Card>
           </Col>

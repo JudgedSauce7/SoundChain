@@ -29,7 +29,8 @@ export default class App extends Component {
     loading: true,
     balance: 0,
     currentActiveLink: "home",
-    searchInput: ""
+    searchInput: "",
+    user: null,
   };
 
   componentDidMount = async () => {
@@ -58,7 +59,8 @@ export default class App extends Component {
       alert(`Failed to load. Please install MetaMask`);
       console.error(error);
     }
-    await this.getLiked()
+    await this.getUserDetails();
+    await this.getLiked();
     await this.getBought();
   };
 
@@ -70,6 +72,12 @@ export default class App extends Component {
     } else {
       this.setState({ uploadCount, loading: false }, this.getUploads);
     }
+  };
+
+  getUserDetails = async () => {
+    const { soundchain, account } = this.state;
+    const user = await soundchain.methods.users(account).call();
+    this.setState({ user });
   };
 
   getUserCount = async () => {
@@ -102,12 +110,12 @@ export default class App extends Component {
   };
 
   updateBalance = async () => {
-    const {web3, account} = this.state
+    const { web3, account } = this.state;
     const wallet = await web3.eth.getBalance(account);
     let balance = web3.utils.fromWei(wallet, "ether");
     balance = parseFloat(balance).toFixed(3);
-    this.setState({balance})
-  }
+    this.setState({ balance });
+  };
 
   captureFile = (event) => {
     event.preventDefault();
@@ -148,20 +156,18 @@ export default class App extends Component {
 
   tipMedia = async (id, amount) => {
     const { soundchain, account, web3 } = this.state;
-    const amt = web3.utils.toWei(amount.toString() , "Ether")
+    const amt = web3.utils.toWei(amount.toString(), "Ether");
     this.setState({ loading: true });
-    await soundchain.methods
-      .tipMedia(id)
-      .send({ from: account, value: amt });
+    await soundchain.methods.tipMedia(id).send({ from: account, value: amt });
     await this.getUploadCount();
     this.updateBalance();
     this.setState({ loading: false, searchInput: "" });
   };
 
   buyMedia = async (id, price) => {
-    const { soundchain, account, web3} = this.state;
+    const { soundchain, account, web3 } = this.state;
     this.setState({ loading: true });
-    const amt = web3.utils.toWei(price.toString(), "Ether")
+    const amt = web3.utils.toWei(price.toString(), "Ether");
     await soundchain.methods.buyMedia(id).send({ from: account, value: amt });
     this.updateBalance();
     this.getBought();
@@ -169,7 +175,7 @@ export default class App extends Component {
   };
 
   getBought = async () => {
-    const { soundchain, account} = this.state;
+    const { soundchain, account } = this.state;
     const boughtSongs = await soundchain.methods.getBought(account).call();
     // songs.forEach(async (id) => {
     //   let song = await soundchain.methods.uploads(id).call();
@@ -179,22 +185,33 @@ export default class App extends Component {
   };
 
   getLiked = async () => {
-    const {soundchain, account, liked} = this.state
+    const { soundchain, account, liked } = this.state;
     const likes = await soundchain.methods.getLiked(account).call();
-    this.setState({liked: likes})
-  }
+    this.setState({ liked: likes });
+  };
 
   changeLinkHandler = (currentActiveLink) => {
     this.setState({ currentActiveLink });
   };
 
   searchHandler = (value) => {
-    this.setState({searchInput: value})
-  }
+    this.setState({ searchInput: value });
+  };
 
   render() {
     if (!this.state.web3) {
-      return <div style={{display: "flex", alignItems: "center", justifyContent: "center", marginTop: 300}}><Spin size="large"/></div>;
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 300,
+          }}
+        >
+          <Spin size="large" />
+        </div>
+      );
     }
     if (this.state.loading) {
       return (
@@ -203,7 +220,7 @@ export default class App extends Component {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            marginTop: 300
+            marginTop: 300,
           }}
         >
           <Spin size="large" />
@@ -234,6 +251,7 @@ export default class App extends Component {
               bought={this.state.bought}
               liked={this.state.liked}
               searchInput={this.state.searchInput}
+              user={this.state.user}
               uploadMedia={this.uploadMedia}
               captureFile={this.captureFile}
               likeMedia={this.likeMedia}

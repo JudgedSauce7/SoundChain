@@ -7,15 +7,14 @@ import "./style.css";
 
 export default class index extends Component {
   render() {
-
     return (
       <div className="mainWindow">
         {this.props.currentActiveLink === "home" ? (
-          <Home bought={this.props.bought} uploads={this.props.uploads}/>
+          <Home bought={this.props.bought} uploads={this.props.uploads} />
         ) : null}
         {this.props.currentActiveLink === "explore" ? (
           <Explore
-          account={this.props.account}
+            account={this.props.account}
             uploads={this.props.uploads}
             loading={this.props.loading}
             likeMedia={this.props.likeMedia}
@@ -23,6 +22,7 @@ export default class index extends Component {
             buyMedia={this.props.buyMedia}
             liked={this.props.liked}
             searchInput={this.props.searchInput}
+            bought={this.props.bought}
           />
         ) : null}
         {this.props.currentActiveLink === "media" ? (
@@ -38,6 +38,7 @@ export default class index extends Component {
             account={this.props.account}
             balance={this.props.balance}
             loading={this.props.loading}
+            user={this.props.user}
           />
         ) : null}
       </div>
