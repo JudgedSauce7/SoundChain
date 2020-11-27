@@ -209,6 +209,13 @@ export default class App extends Component {
 
     this.setState({uploads: sortedUploads})
   }
+  
+  listenSong = async () => {
+    const { account, soundchain, loading } = this.state;
+    // this.setState({ loading: true });
+    await soundchain.methods.listenSong(account).send({ from: account });
+    // this.setState({ loading: false });
+  };
 
   render() {
     if (!this.state.web3) {
@@ -272,6 +279,7 @@ export default class App extends Component {
               likeMedia={this.likeMedia}
               tipMedia={this.tipMedia}
               buyMedia={this.buyMedia}
+              listenSong={this.listenSong}
             />
           </Col>
         </Row>

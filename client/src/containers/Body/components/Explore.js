@@ -9,9 +9,8 @@ import "../style.css";
 
 export default class Explore extends Component {
   constructor(props) {
-    super(props);
-    this.player = React.createRef();
-    this.pauseMedia = this.pauseMedia.bind(this);
+    super();
+    this.player = [];
   }
 
   state = {
@@ -42,7 +41,7 @@ export default class Explore extends Component {
   }
 
   render() {
-    const { bought, account, uploads, liked, searchInput } = this.props;
+    const { bought, account, uploads, liked, searchInput} = this.props;
     const { tip, muted } = this.state;
     const postStyle = {
       width: "600px",

@@ -24,6 +24,7 @@ export default class index extends Component {
             searchInput={this.props.searchInput}
             bought={this.props.bought}
             sortBy={this.props.sortBy}
+            listenSong={this.props.listenSong}
           />
         ) : null}
         {this.props.currentActiveLink === "media" ? (
