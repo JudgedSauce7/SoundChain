@@ -23,6 +23,7 @@ export default class App extends Component {
     uploadCount: null,
     userCount: null,
     uploads: [],
+    media: [],
     users: [],
     bought: [],
     liked: [],
@@ -93,7 +94,7 @@ export default class App extends Component {
       const upload = await this.state.soundchain.methods.uploads(i).call();
       newUploads = [upload, ...newUploads];
     }
-    this.setState({ uploads: newUploads });
+    this.setState({ uploads: newUploads, media: newUploads });
   };
 
   getUsers = async () => {
@@ -209,7 +210,7 @@ export default class App extends Component {
 
     this.setState({uploads: sortedUploads})
   }
-  
+
   listenSong = async () => {
     const { account, soundchain, loading } = this.state;
     // this.setState({ loading: true });
@@ -268,6 +269,7 @@ export default class App extends Component {
               loading={this.state.loading}
               uploadCount={this.state.uploadCount}
               uploads={this.state.uploads}
+              media={this.state.media}
               currentActiveLink={this.state.currentActiveLink}
               bought={this.state.bought}
               liked={this.state.liked}

@@ -30,7 +30,7 @@ export default class index extends Component {
         {this.props.currentActiveLink === "media" ? (
           <Media
             account={this.props.account}
-            uploads={this.props.uploads}
+            uploads={this.props.media}
             uploadMedia={this.props.uploadMedia}
             captureFile={this.props.captureFile}
           />
