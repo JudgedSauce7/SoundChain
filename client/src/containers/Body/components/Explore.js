@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Row, Col, Button, InputNumber } from "antd";
+import { Card, Row, Col, Button, InputNumber, message } from "antd";
 import { HeartFilled, HeartOutlined, SendOutlined } from "@ant-design/icons";
 import Identicon from "identicon.js";
 import Ethlogo from "../../../assets/images/ethlogo.png";
@@ -8,11 +8,6 @@ import "react-h5-audio-player/lib/styles.css";
 import "../style.css";
 
 export default class Explore extends Component {
-  constructor(props) {
-    super();
-    this.player = [];
-  }
-
   state = {
     tip: 0,
   };
@@ -33,16 +28,19 @@ export default class Explore extends Component {
     await this.props.buyMedia(id, price);
   };
 
-  pauseMedia() {
+  pauseMedia(visible) {
+    console.log(visible)
     setTimeout(function () {
-      alert("Buy this song for more !");
+     message.info("Buy this song for unlimited streaming!", 5)
+      
     }, 6000);
     // this.player.pause();
   }
 
   render() {
     const { bought, account, uploads, liked, searchInput} = this.props;
-    const { tip, muted } = this.state;
+    console.log(this.props.visible, this.props.handleClose)
+    const { tip } = this.state;
     const postStyle = {
       width: "600px",
       height: "300px",
@@ -239,7 +237,7 @@ export default class Explore extends Component {
                                   }}
                                   style={{ marginLeft: 10, marginTop: 90 }}
                                   src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
-                                  onPlay={this.pauseMedia}
+                                  onPlay={() => this.pauseMedia()}
                                 />
                               )}
                             </Col>

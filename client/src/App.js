@@ -131,11 +131,18 @@ export default class App extends Component {
   };
 
   uploadMedia = async (title, price) => {
+    this.setState({ loading: true });
     const result = await ipfs.add(this.state.buffer);
     const hash = result.path;
 
-    const { account, soundchain } = this.state;
-    this.setState({ loading: true });
+    const { account, soundchain, uploads } = this.state;
+    for (let i = 0; i < uploads.length; i++) {
+      if (hash === uploads[i].hash_value) {
+        alert("This song has been already uploaded !");
+        this.setState({ loading: false });
+        return;
+      }
+    }
     await soundchain.methods
       .uploadMedia(hash, title, price)
       .send({ from: account });
@@ -153,7 +160,7 @@ export default class App extends Component {
     await this.getUploadCount();
     await this.getLiked();
     this.updateBalance();
-    this.setState({ loading: false, searchInput: "" });
+    this.setState({ loading: false, searchInput: "", sortBy: "latest" });
   };
 
   tipMedia = async (id, amount) => {
@@ -163,7 +170,7 @@ export default class App extends Component {
     await soundchain.methods.tipMedia(id).send({ from: account, value: amt });
     await this.getUploadCount();
     this.updateBalance();
-    this.setState({ loading: false, searchInput: "" });
+    this.setState({ loading: false, searchInput: "", sortBy: "latest" });
   };
 
   buyMedia = async (id, price) => {
@@ -173,7 +180,7 @@ export default class App extends Component {
     await soundchain.methods.buyMedia(id).send({ from: account, value: amt });
     this.updateBalance();
     this.getBought();
-    this.setState({ loading: false, searchInput: "" });
+    this.setState({ loading: false, searchInput: "", sortBy: "latest" });
   };
 
   getBought = async () => {
@@ -197,25 +204,31 @@ export default class App extends Component {
   };
 
   sortHandler = async (value) => {
-    const sortedUploads = this.state.uploads
-    this.setState({sortBy: value});
-    if(value === "likes"){
-      sortedUploads.sort((a,b) => (a.likes < b.likes) ? 1 : ((b.likes < a.likes) ? -1 : 0))
-    } else if(value === "tips") {
-      sortedUploads.sort((a,b) => (a.tipsCollected < b.tipsCollected) ? 1 : ((b.tipsCollected < a.tipsCollected) ? -1 : 0))
+    const sortedUploads = this.state.uploads;
+    this.setState({ sortBy: value });
+    if (value === "likes") {
+      sortedUploads.sort((a, b) =>
+        a.likes < b.likes ? 1 : b.likes < a.likes ? -1 : 0
+      );
+    } else if (value === "tips") {
+      sortedUploads.sort((a, b) =>
+        a.tipsCollected < b.tipsCollected
+          ? 1
+          : b.tipsCollected < a.tipsCollected
+          ? -1
+          : 0
+      );
     } else {
-      this.getUploads()
-      return
+      this.getUploads();
+      return;
     }
 
-    this.setState({uploads: sortedUploads})
-  }
+    this.setState({ uploads: sortedUploads });
+  };
 
   listenSong = async () => {
     const { account, soundchain, loading } = this.state;
-    // this.setState({ loading: true });
     await soundchain.methods.listenSong(account).send({ from: account });
-    // this.setState({ loading: false });
   };
 
   render() {
@@ -276,6 +289,7 @@ export default class App extends Component {
               searchInput={this.state.searchInput}
               user={this.state.user}
               sortBy={this.state.sortBy}
+              
               uploadMedia={this.uploadMedia}
               captureFile={this.captureFile}
               likeMedia={this.likeMedia}

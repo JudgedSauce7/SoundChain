@@ -11,7 +11,6 @@ import "../style.css";
 export default class Home extends Component {
   render() {
     const { bought, uploads } = this.props;
-    console.log(bought)
     return (
       <Row>
         <Col span={18}>
