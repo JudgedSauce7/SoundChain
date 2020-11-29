@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Spin } from "antd";
+import { Spin, message } from "antd";
 import SoundChainContract from "./contracts/SoundChain.json";
 import getWeb3 from "./getWeb3";
 import Header from "./containers/Header/index";
@@ -138,7 +138,7 @@ export default class App extends Component {
     const { account, soundchain, uploads } = this.state;
     for (let i = 0; i < uploads.length; i++) {
       if (hash === uploads[i].hash_value) {
-        alert("This song has been already uploaded !");
+        message.error("This song has already been uploaded by another artist!");
         this.setState({ loading: false });
         return;
       }

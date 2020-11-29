@@ -112,11 +112,11 @@ export default class Profile extends Component {
                   </p>
 
                     <Tooltip title="Total songs streamed">
-                  <HeadsetIcon style={{ color: "#a040a1", fontSize: "40px", marginLeft: 200, marginTop: 10}}/>
+                  <HeadsetIcon style={{ color: "#a040a1", fontSize: "40px", marginLeft: 260, marginTop: 10}}/>
                   </Tooltip>
                   <p
                     style={{
-                      marginLeft: 20,
+                      marginLeft: 10,
                       fontSize: 18,
                       marginBottom: 0,
                       fontWeight: 700,
@@ -138,15 +138,15 @@ export default class Profile extends Component {
                 >
                   <TabPane
                     tab={
-                      <span style={{ color: "#a040a1" }}>
+                      <span style={{ color: "#a040a1"}}>
                         <LineChartOutlined />
                         My Stats
                       </span>
                     }
                     key="stats"
                   >
-                    <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-                    <div style={{width: 500, height: 500}}>
+                    <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", background: "#fff" }}>
+                    <div style={{width: 500, height: 500, marginTop: 30}}>
                     <Doughnut data={data1}
         options={{
           responsive: true,
@@ -154,7 +154,7 @@ export default class Profile extends Component {
         }}/>
         </div>
 
-        <div style={{width: 500, height: 500}}>
+        <div style={{width: 500, height: 500,marginTop: 30}}>
                     <Doughnut data={data2}
         options={{
           responsive: true,
@@ -172,7 +172,9 @@ export default class Profile extends Component {
                     }
                     key="investment"
                   >
+                    <div style={{background: "#fff", width: "100%", height: "100%"}}>
                     <p className="investment">You haven't made any investments yet!</p>
+                    </div>
                   </TabPane>
                 </Tabs>
               </Col>
