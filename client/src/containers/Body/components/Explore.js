@@ -4,6 +4,7 @@ import { HeartFilled, HeartOutlined, SendOutlined } from "@ant-design/icons";
 import Identicon from "identicon.js";
 import Ethlogo from "../../../assets/images/ethlogo.png";
 import AudioPlayer from "react-h5-audio-player";
+import { Scrollbars } from 'react-custom-scrollbars';
 import "react-h5-audio-player/lib/styles.css";
 import "../style.css";
 
@@ -70,18 +71,21 @@ export default class Explore extends Component {
               height: "100vh",
             }}
           >
+            <Scrollbars>
             <Card
               style={{
                 width: "90%",
                 height: "100%",
                 display: "flex",
                 justifyContent: "center",
-                overflowY: "scroll",
+                //overflowY: "scroll",
                 marginBottom: 20,
               }}
               hoverable
             >
+              
               <Row gutter={10}>
+                
                 {uploads
                   .filter(
                     (upload) =>
@@ -246,8 +250,11 @@ export default class Explore extends Component {
                       </Col>
                     );
                   })}
+                 
               </Row>
+              
             </Card>
+            </Scrollbars>
           </Col>
         </Row>
       </div>
