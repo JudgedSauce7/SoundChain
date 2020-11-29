@@ -150,7 +150,8 @@ export default class App extends Component {
     this.getUploadCount(true);
     this.getUploads();
     this.updateBalance();
-    this.setState({ loading: false });
+    this.getUserDetails();
+    this.setState({ loading: false, });
   };
 
   likeMedia = async (id) => {
@@ -160,6 +161,7 @@ export default class App extends Component {
     await this.getUploadCount();
     await this.getLiked();
     this.updateBalance();
+    this.getUserDetails();
     this.setState({ loading: false, searchInput: "", sortBy: "latest" });
   };
 
@@ -170,6 +172,7 @@ export default class App extends Component {
     await soundchain.methods.tipMedia(id).send({ from: account, value: amt });
     await this.getUploadCount();
     this.updateBalance();
+    this.getUserDetails();
     this.setState({ loading: false, searchInput: "", sortBy: "latest" });
   };
 
@@ -180,6 +183,7 @@ export default class App extends Component {
     await soundchain.methods.buyMedia(id).send({ from: account, value: amt });
     this.updateBalance();
     this.getBought();
+    this.getUserDetails();
     this.setState({ loading: false, searchInput: "", sortBy: "latest" });
   };
 
@@ -229,6 +233,7 @@ export default class App extends Component {
   listenSong = async () => {
     const { account, soundchain, loading } = this.state;
     await soundchain.methods.listenSong(account).send({ from: account });
+    this.getUserDetails()
   };
 
   render() {
