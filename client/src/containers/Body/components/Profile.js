@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Row, Col, Tabs } from "antd";
+import { Row, Col, Tabs, Tooltip } from "antd";
 import {
   LineChartOutlined,
   DollarCircleOutlined,
   WalletOutlined,
 } from "@ant-design/icons";
 import Identicon from "identicon.js";
+import HeadsetIcon from '@material-ui/icons/Headset';
 import "../style.css";
 import { Doughnut } from 'react-chartjs-2'
 
@@ -30,8 +31,8 @@ export default class Profile extends Component {
       
       
       backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
+        'rgba(255, 99, 132, 0.5)',
+        'rgba(75, 192, 192, 0.5)',
       ],
       borderColor: [
         'rgba(255, 99, 132, 1)',
@@ -52,8 +53,8 @@ export default class Profile extends Component {
       
       
       backgroundColor: [
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(255, 99, 132, 0.2)',
+        'rgba(75, 192, 192, 0.5)',
+        'rgba(255, 99, 132, 0.5)',
         
       ],
       borderColor: [
@@ -94,9 +95,11 @@ export default class Profile extends Component {
                     marginLeft: "40px",
                   }}
                 >
+                  <Tooltip title="Current wallet balance">
                   <WalletOutlined
                     style={{ color: "#a040a1", fontSize: "40px" }}
                   />
+                  </Tooltip>
                   <p
                     style={{
                       marginLeft: 10,
@@ -106,6 +109,21 @@ export default class Profile extends Component {
                     }}
                   >
                     {balance} ETH
+                  </p>
+
+                    <Tooltip title="Total songs streamed">
+                  <HeadsetIcon style={{ color: "#a040a1", fontSize: "40px", marginLeft: 200, marginTop: 10}}/>
+                  </Tooltip>
+                  <p
+                    style={{
+                      marginLeft: 20,
+                      fontSize: 18,
+                      marginBottom: 0,
+                      fontWeight: 700,
+                      marginTop: 10
+                    }}
+                  >
+                    {user.songsListened}
                   </p>
                 </div>
               </div>
@@ -127,41 +145,6 @@ export default class Profile extends Component {
                     }
                     key="stats"
                   >
-                    {/* <p
-                      style={{
-                        marginLeft: 10,
-                        fontSize: 22,
-                        marginBottom: 0,
-                        fontWeight: 700,
-                      }}
-                    >
-                      Amount Tipped:{" "}
-                      {window.web3.fromWei(
-                        user.amountTipped.toString(),
-                        "Ether"
-                      )}{" "}
-                      ETH <br />
-                      Tips Received:{" "}
-                      {window.web3.fromWei(
-                        user.tipsReceived.toString(),
-                        "Ether"
-                      )}{" "}
-                      ETH
-                      <br /> Amount Earned:{" "}
-                      {window.web3.fromWei(
-                        user.amountEarned.toString(),
-                        "Ether"
-                      )}{" "}
-                      ETH
-                      <br /> Amount Spent:{" "}
-                      {window.web3.fromWei(
-                        user.amountSpent.toString(),
-                        "Ether"
-                      )}{" "}
-                      ETH
-                      <br />
-                      Songs Listened: {user.songsListened};
-                    </p> */}
                     <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
                     <div style={{width: 500, height: 500}}>
                     <Doughnut data={data1}
