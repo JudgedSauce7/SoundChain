@@ -63,8 +63,8 @@ export default class Explore extends Component {
                 height: "100%",
                 display: "flex",
                 justifyContent: "center",
-                //overflowY: "scroll",
                 marginBottom: 20,
+                marginLeft: 60
               }}
               hoverable
             >
@@ -247,7 +247,7 @@ export default class Explore extends Component {
                               )}
                               <AudioPlayer
                                 ref={(ref) => (this.player[key] = ref)}
-                                style={{ marginLeft: 10, marginTop: 60 }}
+                                style={{ marginLeft: 10, marginTop: 30 }}
                                 src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
                                 onPlay={
                                   bought.includes(upload.id)
