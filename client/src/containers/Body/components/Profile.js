@@ -6,65 +6,57 @@ import {
   WalletOutlined,
 } from "@ant-design/icons";
 import Identicon from "identicon.js";
-import HeadsetIcon from '@material-ui/icons/Headset';
+import HeadsetIcon from "@material-ui/icons/Headset";
 import "../style.css";
-import { Doughnut } from 'react-chartjs-2'
+import { Doughnut } from "react-chartjs-2";
 
 const { TabPane } = Tabs;
 
 export default class Profile extends Component {
-
-
   render() {
     const options = {
       background: [255, 255, 255, 255],
     };
     const { user, account, balance } = this.props;
     const data1 = {
-      labels: [
-        'Total Amount Tipped',
-        'Total Tips Collected'
+      labels: ["Total Amount Tipped", "Total Tips Collected"],
+      datasets: [
+        {
+          label: "Status of Tips",
+          data: [
+            window.web3.fromWei(user.amountTipped.toString(), "Ether"),
+            window.web3.fromWei(user.tipsReceived.toString(), "Ether"),
+          ],
+
+          backgroundColor: [
+            "rgba(255, 99, 132, 0.5)",
+            "rgba(75, 192, 192, 0.5)",
+          ],
+          borderColor: ["rgba(255, 99, 132, 1)", "rgba(75, 192, 192, 1)"],
+          borderWidth: 1,
+        },
       ],
-      datasets: [{
-      label: "Status of Tips",  
-      data: [window.web3.fromWei(user.amountTipped.toString(),"Ether"), window.web3.fromWei(user.tipsReceived.toString(),"Ether")],
-      
-      
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.5)',
-        'rgba(75, 192, 192, 0.5)',
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(75, 192, 192, 1)',
-      ],
-      borderWidth: 1,
-    }]
-    }
+    };
 
     const data2 = {
-      labels: [
-        'Total Earnings from Purchases',
-        'Total Spent on Purchases'
+      labels: ["Total Earnings from Purchases", "Total Spent on Purchases"],
+      datasets: [
+        {
+          label: "Status of Earnings",
+          data: [
+            window.web3.fromWei(user.amountEarned.toString(), "Ether"),
+            window.web3.fromWei(user.amountSpent.toString(), "Ether"),
+          ],
+
+          backgroundColor: [
+            "rgba(75, 192, 192, 0.5)",
+            "rgba(255, 99, 132, 0.5)",
+          ],
+          borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
+          borderWidth: 1,
+        },
       ],
-      datasets: [{
-      label: "Status of Earnings",  
-      data: [window.web3.fromWei(user.amountEarned.toString(),"Ether"), window.web3.fromWei(user.amountSpent.toString(),"Ether")],
-      
-      
-      backgroundColor: [
-        'rgba(75, 192, 192, 0.5)',
-        'rgba(255, 99, 132, 0.5)',
-        
-      ],
-      borderColor: [
-        'rgba(75, 192, 192, 1)',
-        'rgba(255, 99, 132, 1)',
-        
-      ],
-      borderWidth: 1,
-    }]
-    }
+    };
 
     return (
       <div>
@@ -96,9 +88,9 @@ export default class Profile extends Component {
                   }}
                 >
                   <Tooltip title="Current wallet balance">
-                  <WalletOutlined
-                    style={{ color: "#a040a1", fontSize: "40px" }}
-                  />
+                    <WalletOutlined
+                      style={{ color: "#a040a1", fontSize: "40px" }}
+                    />
                   </Tooltip>
                   <p
                     style={{
@@ -111,8 +103,15 @@ export default class Profile extends Component {
                     {balance} ETH
                   </p>
 
-                    <Tooltip title="Total songs streamed">
-                  <HeadsetIcon style={{ color: "#a040a1", fontSize: "40px", marginLeft: 260, marginTop: 10}}/>
+                  <Tooltip title="Total songs streamed">
+                    <HeadsetIcon
+                      style={{
+                        color: "#a040a1",
+                        fontSize: "40px",
+                        marginLeft: 260,
+                        marginTop: 10,
+                      }}
+                    />
                   </Tooltip>
                   <p
                     style={{
@@ -120,7 +119,7 @@ export default class Profile extends Component {
                       fontSize: 18,
                       marginBottom: 0,
                       fontWeight: 700,
-                      marginTop: 10
+                      marginTop: 10,
                     }}
                   >
                     {user.songsListened}
@@ -138,30 +137,41 @@ export default class Profile extends Component {
                 >
                   <TabPane
                     tab={
-                      <span style={{ color: "#a040a1"}}>
+                      <span style={{ color: "#a040a1" }}>
                         <LineChartOutlined />
                         My Stats
                       </span>
                     }
                     key="stats"
                   >
-                    <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", background: "#fff" }}>
-                    <div style={{width: 500, height: 500, marginTop: 30}}>
-                    <Doughnut data={data1}
-        options={{
-          responsive: true,
-          maintainAspectRatio: true,
-        }}/>
-        </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        background: "#fff",
+                      }}
+                    >
+                      <div style={{ width: 500, height: 500, marginTop: 30 }}>
+                        <Doughnut
+                          data={data1}
+                          options={{
+                            responsive: true,
+                            maintainAspectRatio: true,
+                          }}
+                        />
+                      </div>
 
-        <div style={{width: 500, height: 500,marginTop: 30}}>
-                    <Doughnut data={data2}
-        options={{
-          responsive: true,
-          maintainAspectRatio: true,
-        }}/>
-        </div>
-        </div>
+                      <div style={{ width: 500, height: 500, marginTop: 30 }}>
+                        <Doughnut
+                          data={data2}
+                          options={{
+                            responsive: true,
+                            maintainAspectRatio: true,
+                          }}
+                        />
+                      </div>
+                    </div>
                   </TabPane>
                   <TabPane
                     tab={
@@ -172,8 +182,16 @@ export default class Profile extends Component {
                     }
                     key="investment"
                   >
-                    <div style={{background: "#fff", width: "100%", height: "100%"}}>
-                    <p className="investment">You haven't made any investments yet!</p>
+                    <div
+                      style={{
+                        background: "#fff",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
+                      <p className="investment">
+                        You haven't made any investments yet!
+                      </p>
                     </div>
                   </TabPane>
                 </Tabs>

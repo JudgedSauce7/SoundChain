@@ -16,21 +16,19 @@ export default class index extends Component {
           <Explore
             account={this.props.account}
             uploads={this.props.uploads}
-            loading={this.props.loading}
             likeMedia={this.props.likeMedia}
             tipMedia={this.props.tipMedia}
             buyMedia={this.props.buyMedia}
             liked={this.props.liked}
             searchInput={this.props.searchInput}
             bought={this.props.bought}
-            sortBy={this.props.sortBy}
             listenSong={this.props.listenSong}
           />
         ) : null}
         {this.props.currentActiveLink === "media" ? (
           <Media
             account={this.props.account}
-            uploads={this.props.media}
+            uploads={this.props.uploads}
             uploadMedia={this.props.uploadMedia}
             captureFile={this.props.captureFile}
           />
@@ -39,7 +37,6 @@ export default class index extends Component {
           <Profile
             account={this.props.account}
             balance={this.props.balance}
-            loading={this.props.loading}
             user={this.props.user}
           />
         ) : null}

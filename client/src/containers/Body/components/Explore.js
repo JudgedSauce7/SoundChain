@@ -8,38 +8,23 @@ import "react-h5-audio-player/lib/styles.css";
 import "../style.css";
 
 export default class Explore extends Component {
+  constructor() {
+    super();
+    this.player = [];
+  }
+
   state = {
     tip: 0,
   };
 
-  likeHandler = async (id) => {
-    await this.props.likeMedia(id);
+  listenHandler = async (id) => {
+    this.player[id].audio.current.muted = true;
+    await this.props.listenSong();
+    this.player[id].audio.current.muted = false;
   };
-
-  changeHandler = (value) => {
-    this.setState({ tip: value });
-  };
-
-  tipPost = async (id, tip) => {
-    await this.props.tipMedia(id, tip);
-  };
-
-  buyTrack = async (id, price) => {
-    await this.props.buyMedia(id, price);
-  };
-
-  pauseMedia(visible) {
-    console.log(visible)
-    setTimeout(function () {
-     message.info("Buy this song for unlimited streaming!", 5)
-      
-    }, 6000);
-    // this.player.pause();
-  }
 
   render() {
-    const { bought, account, uploads, liked, searchInput} = this.props;
-    console.log(this.props.visible, this.props.handleClose)
+    const { bought, account, uploads, liked, searchInput } = this.props;
     const { tip } = this.state;
     const postStyle = {
       width: "600px",
@@ -88,7 +73,7 @@ export default class Explore extends Component {
                       upload.artist !== account &&
                       upload.title.toLowerCase().includes(searchInput)
                   )
-                  .map((upload) => {
+                  .map((upload, key) => {
                     return (
                       <Col span={12} key={upload.id}>
                         <Card style={postStyle} hoverable>
@@ -127,8 +112,8 @@ export default class Explore extends Component {
                                   ) : (
                                     <HeartOutlined
                                       style={likeStyle}
-                                      onClick={() =>
-                                        this.likeHandler(upload.id)
+                                      onClick={async () =>
+                                        await this.props.likeMedia(upload.id)
                                       }
                                     />
                                   )}
@@ -162,8 +147,11 @@ export default class Explore extends Component {
                                 {bought.includes(upload.id) ? null : (
                                   <div>
                                     <Button
-                                      onClick={() =>
-                                        this.buyTrack(upload.id, upload.price)
+                                      onClick={async () =>
+                                        await this.props.buyMedia(
+                                          upload.id,
+                                          upload.price
+                                        )
                                       }
                                       style={{
                                         background: "#a7b0d2",
@@ -194,7 +182,9 @@ export default class Explore extends Component {
                                     <InputNumber
                                       defaultValue={tip}
                                       style={{ borderRadius: 10 }}
-                                      onChange={this.changeHandler}
+                                      onChange={(value) =>
+                                        this.setState({ tip: value })
+                                      }
                                     />
                                     <Button
                                       style={{
@@ -204,8 +194,11 @@ export default class Explore extends Component {
                                         background: "#a7b0d2",
                                         marginLeft: 10,
                                       }}
-                                      onClick={() =>
-                                        this.tipPost(upload.id, tip)
+                                      onClick={async () =>
+                                        await this.props.tipMedia(
+                                          upload.id,
+                                          tip
+                                        )
                                       }
                                       icon={
                                         <SendOutlined
@@ -223,23 +216,41 @@ export default class Explore extends Component {
                             <Col span={18}>
                               <p className="postTitle">{upload.title}</p>
                               {bought.includes(upload.id) ? (
-                                <AudioPlayer
-                                  ref={(player) => {
-                                    this.player = player;
+                                <p
+                                  style={{
+                                    textAlign: "center",
+                                    marginTop: 10,
+                                    fontWeight: 700,
+                                    fontSize: 14,
+                                    marginBottom: 5,
                                   }}
-                                  style={{ marginLeft: 10, marginTop: 90 }}
-                                  src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
-                                />
+                                >
+                                  Already Bought !
+                                </p>
                               ) : (
-                                <AudioPlayer
-                                  ref={(player) => {
-                                    this.player = player;
+                                <p
+                                  style={{
+                                    textAlign: "center",
+                                    marginTop: 10,
+                                    fontWeight: 700,
+                                    fontSize: 14,
+                                    marginBottom: 5,
                                   }}
-                                  style={{ marginLeft: 10, marginTop: 90 }}
-                                  src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
-                                  onPlay={() => this.pauseMedia()}
-                                />
+                                >
+                                  Pay a gas fee, every time you listen or buy it
+                                  once for unlimited access !
+                                </p>
                               )}
+                              <AudioPlayer
+                                ref={(ref) => (this.player[key] = ref)}
+                                style={{ marginLeft: 10, marginTop: 60 }}
+                                src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
+                                onPlay={
+                                  bought.includes(upload.id)
+                                    ? null
+                                    : () => this.listenHandler(key)
+                                }
+                              />
                             </Col>
                           </Row>
                         </Card>

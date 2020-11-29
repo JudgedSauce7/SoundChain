@@ -57,14 +57,16 @@ export default class Media extends Component {
                               className="music"
                               style={{ margin: 0, marginLeft: 10 }}
                             >
-                              {window.web3.fromWei(upload.tipsCollected.toString(), "Ether")}
+                              {window.web3.fromWei(
+                                upload.tipsCollected.toString(),
+                                "Ether"
+                              )}
                             </p>
                           </div>
                         </div>
 
                         <AudioPlayer
                           src={`https://ipfs.infura.io/ipfs/${upload.hash_value}`}
-                          // autoPlay={false}
                           style={{
                             width: 270,
                             height: 80,

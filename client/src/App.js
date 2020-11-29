@@ -18,13 +18,11 @@ export default class App extends Component {
   state = {
     web3: null,
     account: null,
+    user: null,
     soundchain: null,
     buffer: null,
     uploadCount: null,
-    userCount: null,
     uploads: [],
-    media: [],
-    users: [],
     bought: [],
     liked: [],
     loading: true,
@@ -32,7 +30,6 @@ export default class App extends Component {
     currentActiveLink: "home",
     searchInput: "",
     sortBy: "latest",
-    user: null,
   };
 
   componentDidMount = async () => {
@@ -40,10 +37,6 @@ export default class App extends Component {
       const web3 = await getWeb3();
       const accounts = await web3.eth.getAccounts();
       const account = accounts[0];
-      const wallet = await web3.eth.getBalance(account);
-
-      let balance = web3.utils.fromWei(wallet, "ether");
-      balance = parseFloat(balance).toFixed(3);
 
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = SoundChainContract.networks[networkId];
@@ -53,17 +46,31 @@ export default class App extends Component {
         deployedNetwork && deployedNetwork.address
       );
 
-      this.setState(
-        { web3, account, soundchain, balance },
-        this.getUploadCount
-      );
+      this.setState({ web3, account, soundchain }, this.getUploadCount);
+
+      await this.updateBalance();
+      await this.getUserDetails();
+      await this.getUploadCount();
+      await this.getLiked();
+      await this.getBought();
     } catch (error) {
       alert(`Failed to load. Please install MetaMask`);
       console.error(error);
     }
-    await this.getUserDetails();
-    await this.getLiked();
-    await this.getBought();
+  };
+
+  updateBalance = async () => {
+    const { web3, account } = this.state;
+    const wallet = await web3.eth.getBalance(account);
+    let balance = web3.utils.fromWei(wallet, "ether");
+    balance = parseFloat(balance).toFixed(3);
+    this.setState({ balance });
+  };
+
+  getUserDetails = async () => {
+    const { soundchain, account } = this.state;
+    const user = await soundchain.methods.users(account).call();
+    this.setState({ user });
   };
 
   getUploadCount = async (newUpload) => {
@@ -76,18 +83,6 @@ export default class App extends Component {
     }
   };
 
-  getUserDetails = async () => {
-    const { soundchain, account } = this.state;
-    const user = await soundchain.methods.users(account).call();
-    this.setState({ user });
-  };
-
-  getUserCount = async () => {
-    const { soundchain } = this.state;
-    const userCount = await soundchain.methods.userCount().call();
-    this.setState({ userCount });
-  };
-
   getUploads = async () => {
     let newUploads = [];
     for (let i = 1; i <= this.state.uploadCount; i++) {
@@ -97,13 +92,6 @@ export default class App extends Component {
     this.setState({ uploads: newUploads, media: newUploads });
   };
 
-  getUsers = async () => {
-    for (let i = 1; i <= this.state.userCount; i++) {
-      const user = await this.state.soundchain.methods.users(i).call();
-      this.setState({ users: [...this.state.users, user] });
-    }
-  };
-
   updateUploads = async () => {
     const upload = await this.state.soundchain.methods
       .uploads(this.state.uploadCount)
@@ -111,20 +99,11 @@ export default class App extends Component {
     this.setState({ uploads: [...this.state.uploads, upload] });
   };
 
-  updateBalance = async () => {
-    const { web3, account } = this.state;
-    const wallet = await web3.eth.getBalance(account);
-    let balance = web3.utils.fromWei(wallet, "ether");
-    balance = parseFloat(balance).toFixed(3);
-    this.setState({ balance });
-  };
-
   captureFile = (event) => {
     event.preventDefault();
     const file = event.target.files[0];
     const reader = new window.FileReader();
     reader.readAsArrayBuffer(file);
-
     reader.onloadend = () => {
       this.setState({ buffer: Buffer(reader.result) });
     };
@@ -148,10 +127,10 @@ export default class App extends Component {
       .send({ from: account });
 
     this.getUploadCount(true);
-    this.getUploads();
     this.updateBalance();
     this.getUserDetails();
-    this.setState({ loading: false, });
+
+    this.setState({ loading: false });
   };
 
   likeMedia = async (id) => {
@@ -194,9 +173,9 @@ export default class App extends Component {
   };
 
   getLiked = async () => {
-    const { soundchain, account, liked } = this.state;
-    const likes = await soundchain.methods.getLiked(account).call();
-    this.setState({ liked: likes });
+    const { soundchain, account } = this.state;
+    const likedSongs = await soundchain.methods.getLiked(account).call();
+    this.setState({ liked: likedSongs });
   };
 
   changeLinkHandler = (currentActiveLink) => {
@@ -226,14 +205,13 @@ export default class App extends Component {
       this.getUploads();
       return;
     }
-
     this.setState({ uploads: sortedUploads });
   };
 
   listenSong = async () => {
-    const { account, soundchain, loading } = this.state;
+    const { account, soundchain } = this.state;
     await soundchain.methods.listenSong(account).send({ from: account });
-    this.getUserDetails()
+    this.getUserDetails();
   };
 
   render() {
@@ -284,17 +262,13 @@ export default class App extends Component {
             <Body
               account={this.state.account}
               balance={this.state.balance}
-              loading={this.state.loading}
-              uploadCount={this.state.uploadCount}
               uploads={this.state.uploads}
-              media={this.state.media}
               currentActiveLink={this.state.currentActiveLink}
               bought={this.state.bought}
               liked={this.state.liked}
               searchInput={this.state.searchInput}
               user={this.state.user}
               sortBy={this.state.sortBy}
-              
               uploadMedia={this.uploadMedia}
               captureFile={this.captureFile}
               likeMedia={this.likeMedia}
